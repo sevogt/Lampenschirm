@@ -105,7 +105,7 @@ void draw() {
   
   fill(255,0,0);
   textSize(32);
-  text("FPS: "+frameRate, 10, 50);
+  text("FPS: "+frameRate, 600, 800);
   
   
  
