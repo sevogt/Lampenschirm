@@ -117,6 +117,7 @@ public class PWindow extends PApplet
 					e.printStackTrace();
 					println("error");
 				}
+	    	weltDaten.simulate();
 	    	weltDaten.render(cam, main_scene);
 
 	    	main_scene.perspective(100, aspekt_ratio , Main.Near, Main.Far);

@@ -34,6 +34,15 @@ public class WeltDaten
 		setupPlaneten();
 	}
 	
+	public void simulate()
+	{
+		rotation_value+=0.1;
+		if(rotation_value>parent.TWO_PI)
+		{
+			rotation_value=0f;
+		}
+	}
+	
 	public void render( PeasyCam aCam, PGraphics aGraphics)
 	{
 
@@ -51,11 +60,7 @@ public class WeltDaten
 			aGraphics.rotateY(rotation_value);
 			aGraphics.translate(planet1.position.x,planet1.position.y,planet1.position.z);
 			
-			rotation_value+=0.1;
-			if(rotation_value>parent.TWO_PI)
-			{
-				rotation_value=0f;
-			}
+		
 
 			aGraphics.shape(planet1.shape);
 			aGraphics.popMatrix();

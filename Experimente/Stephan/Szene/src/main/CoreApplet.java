@@ -41,6 +41,10 @@ public class CoreApplet extends PApplet
 	AtomicInteger stopper;
 
 	PGraphics dupLayer;
+	
+	private PGraphics layer_persp_1;
+	private PGraphics layer_persp_2;
+	private PGraphics layer_persp_3;
 
 	float aspekt_ratio;
 
@@ -60,16 +64,33 @@ public class CoreApplet extends PApplet
 
 	PVector point = new PVector(0,0);
 
-	final int width = 800;
-	final int height = 600;
-	Dimension dimension = new Dimension(width,height);
+	final int my_width = 1200;
+	final int my_height = 500;
+	
+	final int my_width3 = my_width/3;
+	
+	int the_width_3 = 0;
+	int the_height = 0;
+	
+	
+	final boolean fullScreen = true;
+	
+	
+	Dimension dimension = new Dimension(my_width,my_height);
 
 	float speed = 189.9f; // m / s
 
 	@Override
 	public void settings() { 	
-//		fullScreen(P3D);
-		size(dimension.width,dimension.height,P3D);
+		if(fullScreen)
+		{
+			fullScreen(P3D);
+		}
+		else
+		{
+			size(dimension.width,dimension.height,P3D);
+		}
+		
 	}
 
 	@Override
@@ -77,16 +98,20 @@ public class CoreApplet extends PApplet
 	{ 
 		stopper = new AtomicInteger(6);
 
-		aspekt_ratio = ((float)width)/((float)height);
+		aspekt_ratio = ((float)my_width)/((float)my_height);
 		
 		weltDaten = new WeltDaten(this);
 
 		applets = new PWindow[3];
 
-	  main_scene = createGraphics(width, height,P3D);
-    buffer2d = createGraphics(width, height,P2D);
+	  main_scene = createGraphics(my_width, my_height,P3D);
+    buffer2d = createGraphics(my_width, my_height,P2D);
     
-    dupLayer = createGraphics(width, height,P2D);
+    dupLayer = createGraphics(my_width, my_height,P2D);
+    
+    layer_persp_1 = createGraphics(my_width, my_height,P2D);
+    layer_persp_2 = createGraphics(my_width, my_height,P2D);
+    layer_persp_3 = createGraphics(my_width, my_height,P2D);
 
     main_scene.beginDraw();
     main_scene.background(0, 0, 0);
@@ -252,6 +277,55 @@ public class CoreApplet extends PApplet
         output3.write(1);
   		} catch (IOException e) {}
     }
+    else if(Main.bug_mode==3)
+    {
+
+    	if(fullScreen)
+  		{
+    		the_width_3 = width/3;
+    		the_height = height;
+  		}
+  		else
+  		{
+  			the_width_3 = my_width3;
+    		the_height = my_height;
+  		}
+    	
+    	aspekt_ratio = ((float)the_width_3)/((float)the_height);
+    	
+  	  main_scene = createGraphics(the_width_3, the_height,P3D);
+      buffer2d = createGraphics(the_width_3, the_height,P2D);
+      
+      layer_persp_1 = createGraphics(the_width_3, the_height,P2D);
+      layer_persp_2 = createGraphics(the_width_3, the_height,P2D);
+      layer_persp_3 = createGraphics(the_width_3, the_height,P2D);
+      
+      cameras = new PeasyCam[3];
+      
+  		PeasyCam cam1 = new PeasyCam(this, 0, 0, 0, Main.kamera_distanz_von_zylinder);
+//      cam1.setActive(false );
+      cam1.setMinimumDistance(1);
+      cam1.setMaximumDistance(500);  
+      
+      
+      PeasyCam cam2 = new PeasyCam(this, 0, 0, 0, Main.kamera_distanz_von_zylinder);
+//      cam2.setActive(false );
+      cam2.setMinimumDistance(1);
+      cam2.setMaximumDistance(500); 
+      cam2.rotateY((2f*PI/3f));
+      
+      PeasyCam cam3 = new PeasyCam(this, 0, 0, 0, Main.kamera_distanz_von_zylinder);
+//      cam3.setActive(false );
+      cam3.setMinimumDistance(1);
+      cam3.setMaximumDistance(500); 
+      cam3.rotateY((2f*2f*PI/3f));
+      
+      cameras[0]=cam1;
+      cameras[1]=cam2;
+      cameras[2]=cam3;
+      
+      
+    }
 
 
 		//z - achse geht  >0 nach vorne zum benutzer hin
@@ -306,6 +380,7 @@ public class CoreApplet extends PApplet
 //				buffer2d = createGraphics(width, height,P2D);
 				PGraphics aBuffer2d = buffer2d;
 
+				weltDaten.simulate();
 				weltDaten.render(aCam,aGraphics);	
 				aGraphics.perspective(100, aspekt_ratio , Main.Near, Main.Far);
 				aCam.getState().apply(aGraphics);
@@ -370,9 +445,10 @@ public class CoreApplet extends PApplet
 
 					PGraphics aGraphics = main_scene;
 					
-					buffer2d = createGraphics(width, height,P2D);
+					buffer2d = createGraphics(my_width, my_width,P2D);
 					PGraphics aBuffer2d = buffer2d;
 
+					weltDaten.simulate();
 					weltDaten.render(aCam,aGraphics);	
 					aGraphics.perspective(100, applet.aspekt_ratio , Main.Near, Main.Far);
 					aCam.getState().apply(aGraphics);
@@ -416,7 +492,64 @@ public class CoreApplet extends PApplet
 	        output3.write(1);
 	  		} catch (IOException e) {}
 				
+			}
+			else if (Main.bug_mode==3)
+			{
 				
+				
+				PGraphics aGraphics = main_scene;
+				PGraphics aBuffer2d = buffer2d;
+				weltDaten.simulate();
+
+				{
+					PeasyCam aCam = cameras[0];
+					weltDaten.render(aCam,aGraphics);	
+					aGraphics.perspective(100, aspekt_ratio , Main.Near, Main.Far);
+					aCam.getState().apply(aGraphics);
+
+					aBuffer2d.beginDraw();
+					aBuffer2d.background(0);
+					aBuffer2d.image(aGraphics, 0, 0);
+					aBuffer2d.endDraw();
+
+					aCam.beginHUD();
+					image(aBuffer2d, 0, 0);
+					aCam.endHUD();
+				}
+				
+				{
+					PeasyCam aCam = cameras[1];
+					weltDaten.render(aCam,aGraphics);	
+					aGraphics.perspective(100, aspekt_ratio , Main.Near, Main.Far);
+
+					aCam.getState().apply(aGraphics);
+
+					aBuffer2d.beginDraw();
+					aBuffer2d.background(0);
+					aBuffer2d.image(aGraphics, 0, 0);
+					aBuffer2d.endDraw();
+
+					aCam.beginHUD();
+					image(aBuffer2d, the_width_3, 0);
+					aCam.endHUD();
+				}
+				
+				{
+					PeasyCam aCam = cameras[2];
+					weltDaten.render(aCam,aGraphics);	
+					aGraphics.perspective(100, aspekt_ratio , Main.Near, Main.Far);
+
+					aCam.getState().apply(aGraphics);
+
+					aBuffer2d.beginDraw();
+					aBuffer2d.background(0);
+					aBuffer2d.image(aGraphics, 0, 0);
+					aBuffer2d.endDraw();
+
+					aCam.beginHUD();
+					image(aBuffer2d, the_width_3*2, 0);
+					aCam.endHUD();
+				}
 				
 			}
 			
