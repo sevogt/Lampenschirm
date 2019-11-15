@@ -8,7 +8,7 @@ PGraphics fish_screen;
 //Geklaut bei:
 //https://processing.org/examples/texturecylinder.html
 
-int tubeRes = 128;
+int tubeRes = 256;
 float[] tubeX = new float[tubeRes];
 float[] tubeY = new float[tubeRes];
 
@@ -90,6 +90,7 @@ void draw() {
   pushMatrix();
   translate(width / 2, height / 2);
   rotateY(-PI); //?
+  //rotateX(PI/4);
   
   beginShape(QUAD_STRIP);
   texture(fish_screen);
