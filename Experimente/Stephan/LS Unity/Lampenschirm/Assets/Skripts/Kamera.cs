@@ -7,7 +7,7 @@ public class Kamera : MonoBehaviour
     // Start is called before the first frame update
 
 
-    private float dist_to_centre = 1.5f;
+    private float dist_to_centre = 2.15f;
     private Vector3 target = new Vector3(0,0,0);
     Camera[] myCams = new Camera[4];
     void Start()
@@ -54,7 +54,27 @@ public class Kamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
+        if(Input.GetKeyDown ("s"))
+        { 
+            myCams[1].transform.position = new Vector3(myCams[1].transform.position.x-0.05f,-0.2f,0);
+         
+        }
+        if(Input.GetKeyDown ("w"))
+        {
+            myCams[1].transform.position = new Vector3(myCams[1].transform.position.x+0.05f,-0.2f,0);
+        }
+        if(Input.GetKeyDown ("y"))
+        {
+            myCams[1].fieldOfView+=1;
+        }
+        if(Input.GetKeyDown ("x"))
+        {
+            myCams[1].fieldOfView-=1;
+        }
+        myCams[1].transform.LookAt(target);
+        myCams[2].transform.LookAt(target);
+        myCams[3].transform.LookAt(target);
        
     }
 }
