@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controller : MonoBehaviour
+public class Gui_Logik : MonoBehaviour
 {
+   
     const string aquarium = "aquarium";
     const string balle = "balle";
 
@@ -13,12 +14,12 @@ public class Controller : MonoBehaviour
     private GameObject toggle_group;
     private GameObject canvas_aqua;
     private GameObject canvas_ball;
-    // Start is called before the first frame update
+
     void Start()
     {
-        Time.timeScale = 0;
+        
         active= false;
-        toggle_group = GameObject.Find("ToggleGroup");
+        toggle_group = GameObject.Find("/D3_Welt/Canvas/ToggleGroup");
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
         for (int i = 0; i < allObjects.Length; i++)
         {
@@ -60,7 +61,7 @@ public class Controller : MonoBehaviour
         {
             toggle_group.SetActive(false);
             einmalig_group=false;
-            GameObject.Find("LogikMaster").GetComponent<Logik>().start_ball();
+            GameObject.Find("/D3_Welt").GetComponent<Logik>().start_ball();
         }
         state_change();
         
@@ -72,21 +73,22 @@ public class Controller : MonoBehaviour
         {
             toggle_group.SetActive(false);
             einmalig_group=false;
-            GameObject.Find("LogikMaster").GetComponent<Logik>().start_aqua();
+            GameObject.Find("/D3_Welt").GetComponent<Logik>().start_aqua();
         }
         state_change();
        
     }
+    
 
     public void gui_reset()
     {
         active=false;
         Time.timeScale = 0;
-        var txt = GameObject.Find("Running").GetComponent<UnityEngine.UI.Text>();
+        var txt = GameObject.Find("/D3_Welt/Canvas/Running").GetComponent<UnityEngine.UI.Text>();
         txt.text= "Pause";
-        GameObject.Find("LogikMaster").GetComponent<Logik>().reset_all();
+        GameObject.Find("/D3_Welt").GetComponent<Logik>().reset_all();
         toggle_group.SetActive(true);
-        GameObject.Find("ToggleA").GetComponent<UnityEngine.UI.Toggle>().isOn=true;
+        GameObject.Find("/D3_Welt/Canvas/ToggleGroup/ToggleA").GetComponent<UnityEngine.UI.Toggle>().isOn=true;
         einmalig_group=true;
         canvas_aqua.SetActive(true);
         canvas_ball.SetActive(false);
@@ -98,18 +100,22 @@ public class Controller : MonoBehaviour
         {
             active=false;
             Time.timeScale = 0;
-            var txt = GameObject.Find("Running").GetComponent<UnityEngine.UI.Text>();
+            var txt = GameObject.Find("/D3_Welt/Canvas/Running").GetComponent<UnityEngine.UI.Text>();
             txt.text= "Pause";
         }
         else
         {
             active=true;
             Time.timeScale = 1;
-            var txt = GameObject.Find("Running").GetComponent<UnityEngine.UI.Text>();
+            var txt = GameObject.Find("/D3_Welt/Canvas/Running").GetComponent<UnityEngine.UI.Text>();
             txt.text= "Running";
         }
     }
 
-    // Update is called once per frame
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 }

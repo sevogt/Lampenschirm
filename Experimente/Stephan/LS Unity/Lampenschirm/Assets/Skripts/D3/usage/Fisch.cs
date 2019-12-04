@@ -11,7 +11,7 @@ public class Fisch : MonoBehaviour
     private float speed = 0.2f;
     void Start()
     {
-
+        
     }
 
 
