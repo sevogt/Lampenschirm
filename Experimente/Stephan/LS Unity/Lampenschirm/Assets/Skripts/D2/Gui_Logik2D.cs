@@ -22,7 +22,7 @@ public class Gui_Logik2D : MonoBehaviour
 
     public void gui_mehr()
     {
-        ;
+        GameObject.Find("/D2_Welt").GetComponent<Logik2D>().mehr(3);
     }
 
     public void gui_start_aqua()
