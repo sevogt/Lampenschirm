@@ -55,15 +55,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Skripts\CameraRender.cs" />
      <Compile Include="Assets\Skripts\Const.cs" />
-     <Compile Include="Assets\Skripts\D2\D2_Welt.cs" />
-     <Compile Include="Assets\Skripts\D2\Gui_Logik2D.cs" />
-     <Compile Include="Assets\Skripts\D2\Logik2D.cs" />
-     <Compile Include="Assets\Skripts\D3\D3_Welt.cs" />
-     <Compile Include="Assets\Skripts\D3\Gui_Logik.cs" />
-     <Compile Include="Assets\Skripts\D3\Logik.cs" />
-     <Compile Include="Assets\Skripts\D3\Movement.cs" />
-     <Compile Include="Assets\Skripts\D3\usage\Fisch.cs" />
+     <Compile Include="Assets\Skripts\D2_Welt.cs" />
+     <Compile Include="Assets\Skripts\Gui_Logik2D.cs" />
+     <Compile Include="Assets\Skripts\Logik2D.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/Steve/git/gp_a/Lampenschirm/Experimente/Stephan/LS Unity/Lampenschirm/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
