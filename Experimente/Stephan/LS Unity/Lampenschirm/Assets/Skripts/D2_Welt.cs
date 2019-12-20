@@ -58,8 +58,8 @@ public class D2_Welt : MonoBehaviour
 
         // -- cam1
         camData[0].fov=19.8f;
-        camData[0].height=-Const.height_zylinder/2f-0.015f;//-0.085f;
-        camData[0].distance=1.68f+Const.radius;
+        camData[0].height=-Const.height_zylinder/2f-0.04f;//-0.085f;
+        camData[0].distance=1.365f+Const.radius;
         camData[0].x_rotation=0;
 
         // -- cam2
