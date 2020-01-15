@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Skripts\BasisFischLogik.cs" />
      <Compile Include="Assets\Skripts\CameraRender.cs" />
      <Compile Include="Assets\Skripts\Const.cs" />
      <Compile Include="Assets\Skripts\D2_Welt.cs" />

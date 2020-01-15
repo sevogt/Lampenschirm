@@ -1,0 +1,751 @@
+fileFormatVersion: 2
+guid: fe2b1123b994c44f1bd87230e8f10320
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1460800030560970354
+    second: ClownPink_0
+  - first:
+      213: 1951664967784379870
+    second: ClownPink_1
+  - first:
+      213: 8098859656849622411
+    second: ClownPink_2
+  - first:
+      213: 1310803490342950629
+    second: ClownPink_3
+  - first:
+      213: -4698178311149574297
+    second: ClownPink_4
+  - first:
+      213: 8313895580515797786
+    second: ClownPink_5
+  - first:
+      213: -6780681650544626757
+    second: ClownPink_6
+  - first:
+      213: -4547515231806083051
+    second: ClownPink_7
+  - first:
+      213: -4141667922583483335
+    second: ClownPink_8
+  - first:
+      213: -6893832469857349311
+    second: ClownPink_9
+  - first:
+      213: -6058926889830395272
+    second: ClownPink_10
+  - first:
+      213: -5678314018058635375
+    second: ClownPink_11
+  - first:
+      213: -8960634450472707692
+    second: ClownPink_12
+  - first:
+      213: 8453129482904724932
+    second: ClownPink_13
+  - first:
+      213: -1256309698308465172
+    second: ClownPink_14
+  - first:
+      213: 471422638009290858
+    second: ClownPink_15
+  - first:
+      213: -6311467351187182381
+    second: ClownPink_16
+  - first:
+      213: -2916311735777973715
+    second: ClownPink_17
+  - first:
+      213: 2118405626816715144
+    second: ClownPink_18
+  - first:
+      213: 449784748617796503
+    second: ClownPink_19
+  - first:
+      213: 5712009165194540424
+    second: ClownPink_20
+  - first:
+      213: 2956185027772212092
+    second: ClownPink_21
+  - first:
+      213: 7963142864523831723
+    second: ClownPink_22
+  - first:
+      213: -645713050560403873
+    second: ClownPink_23
+  - first:
+      213: -5817909004910436096
+    second: ClownPink_24
+  - first:
+      213: 4628107466646579787
+    second: ClownPink_25
+  - first:
+      213: -3689929802118829396
+    second: ClownPink_26
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ClownPink_0
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 2482
+        width: 486
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 724303ee4baab43db8891b69ba34c723
+      internalID: 1460800030560970354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_1
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 2482
+        width: 489
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 083abb1087d5d4c71906fcf819c9a7f0
+      internalID: 1951664967784379870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_2
+      rect:
+        serializedVersion: 2
+        x: 1233
+        y: 2483
+        width: 487
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd5b5ea265b6740b18d094ecb05f7b87
+      internalID: 8098859656849622411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_3
+      rect:
+        serializedVersion: 2
+        x: 1818
+        y: 2486
+        width: 486
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84fc9153cd72d4e2f8e57195cfe9bf7a
+      internalID: 1310803490342950629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_4
+      rect:
+        serializedVersion: 2
+        x: 2404
+        y: 2489
+        width: 485
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 070b9788a6a954858885daa61a388db6
+      internalID: -4698178311149574297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_5
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 2011
+        width: 485
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 665e28f63ca79443590354dd0aff0285
+      internalID: 8313895580515797786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_6
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 2014
+        width: 487
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03d3de0647b7444558abe11de9712f60
+      internalID: -6780681650544626757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_7
+      rect:
+        serializedVersion: 2
+        x: 1231
+        y: 2017
+        width: 485
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27908b132a4f94038bf085d3372ababe
+      internalID: -4547515231806083051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_8
+      rect:
+        serializedVersion: 2
+        x: 1818
+        y: 2024
+        width: 485
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6759f8d6352fa4b4693fd54db5dd6641
+      internalID: -4141667922583483335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_9
+      rect:
+        serializedVersion: 2
+        x: 2403
+        y: 2027
+        width: 486
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7c64fb090690482aa7c7c5f5a9c3fb3
+      internalID: -6893832469857349311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_10
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 1549
+        width: 485
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9001ac222c03c4cc781e20e678ad21c5
+      internalID: -6058926889830395272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_11
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 1550
+        width: 486
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e18d0853599d14576b2566c990d80cc8
+      internalID: -5678314018058635375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_12
+      rect:
+        serializedVersion: 2
+        x: 1231
+        y: 1552
+        width: 485
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4542927ee47fe4c9aa57852481b76b2e
+      internalID: -8960634450472707692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_13
+      rect:
+        serializedVersion: 2
+        x: 1818
+        y: 1552
+        width: 485
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdd2ae890008d4e90854ed12715dc57e
+      internalID: 8453129482904724932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_14
+      rect:
+        serializedVersion: 2
+        x: 2403
+        y: 1552
+        width: 486
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74dbf7a36c9f240858535686b920c3b9
+      internalID: -1256309698308465172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_15
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 1069
+        width: 485
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0be8ae28fc04546488c714c2445b53d4
+      internalID: 471422638009290858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_16
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 1067
+        width: 487
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7b7104d3495d4465b13ef5cf47a986e
+      internalID: -6311467351187182381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_17
+      rect:
+        serializedVersion: 2
+        x: 1231
+        y: 1065
+        width: 487
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61a50aec2bce74583af68c4c1d6a395f
+      internalID: -2916311735777973715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_18
+      rect:
+        serializedVersion: 2
+        x: 1818
+        y: 1059
+        width: 486
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 629790e86ca894c9fa424ae7e7295bc8
+      internalID: 2118405626816715144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_19
+      rect:
+        serializedVersion: 2
+        x: 2403
+        y: 1057
+        width: 488
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85cd08ea731ba49bea14553c48c92128
+      internalID: 449784748617796503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_20
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 573
+        width: 488
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c73f459c5ced54e50b587ae229cc0105
+      internalID: 5712009165194540424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_21
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 570
+        width: 489
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1556073db083c4f34a6f1556ad42b64b
+      internalID: 2956185027772212092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_22
+      rect:
+        serializedVersion: 2
+        x: 1233
+        y: 567
+        width: 487
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c86c976734e124b759dbf676727980f0
+      internalID: 7963142864523831723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_23
+      rect:
+        serializedVersion: 2
+        x: 1818
+        y: 564
+        width: 489
+        height: 285
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5edc6f931a5b4863aa8e2906fce2305
+      internalID: -645713050560403873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_24
+      rect:
+        serializedVersion: 2
+        x: 2403
+        y: 562
+        width: 489
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98d2db710637d43aa936df388224cbe9
+      internalID: -5817909004910436096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_25
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 81
+        width: 488
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a2c425d38aa041a38de4aba4378d4f9
+      internalID: 4628107466646579787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ClownPink_26
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 82
+        width: 488
+        height: 286
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a4308a9e45224025b8046e01de3e377
+      internalID: -3689929802118829396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5cf7f7c378465445a821acfe50e81379
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

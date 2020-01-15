@@ -10,6 +10,7 @@ public class D2_Welt : MonoBehaviour
     private Camera camera1;
     private Camera camera2;
     private Camera camera3;
+    private Camera camera4;
 
     void Awake() 
     {
@@ -18,6 +19,8 @@ public class D2_Welt : MonoBehaviour
         camera1 = GameObject.Find("/D2_Welt/Camera1").GetComponent<Camera>();
         camera2 = GameObject.Find("/D2_Welt/Camera2").GetComponent<Camera>();
         camera3 = GameObject.Find("/D2_Welt/Camera3").GetComponent<Camera>();
+        
+        camera4 = GameObject.Find("/D2_Welt/Camera4").GetComponent<Camera>();
 
         // init
         aquarium.transform.position = Const.target;
@@ -42,19 +45,24 @@ public class D2_Welt : MonoBehaviour
 
         CamData[] camData= parseData("text");
         
-        setup_camera(camera1,camData[0],0); 
+        setup_camera(camera1,camData[0], 0); 
         setup_camera(camera2,camData[1],-120);
         setup_camera(camera3,camData[2],-240);
+        
+        setup_camera(camera4,camData[3],0);
+
 
     }
 
     private CamData[] parseData(string text)
     {
-        CamData[] camData= new CamData[3];
+        CamData[] camData= new CamData[4];
 
         camData[0] = new CamData();
         camData[1] = new CamData();
         camData[2] = new CamData();
+        
+        camData[3] = new CamData();
 
         // -- cam1
         camData[0].fov=19.8f;
@@ -73,6 +81,12 @@ public class D2_Welt : MonoBehaviour
         camData[2].height=-Const.height_zylinder/2f-0.04f;
         camData[2].distance=1.365f+Const.radius;
         camData[2].x_rotation=0;
+
+        // -- cam4
+        camData[3].fov=19.8f;
+        camData[3].height=-Const.height_zylinder/2f-0.04f;
+        camData[3].distance= - (1.365f+Const.radius);
+        camData[3].x_rotation=0;
 
         return camData;
     }

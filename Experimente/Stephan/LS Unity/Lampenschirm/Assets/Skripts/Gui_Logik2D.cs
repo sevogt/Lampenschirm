@@ -98,6 +98,7 @@ public class Gui_Logik2D : MonoBehaviour
         float data = float.Parse(text);
 
         data-=0.001f;
+        
         input.text =data.ToString();
 
         Camera camera = GameObject.Find("/D2_Welt/Camera"+active_beamer).GetComponent<Camera>();

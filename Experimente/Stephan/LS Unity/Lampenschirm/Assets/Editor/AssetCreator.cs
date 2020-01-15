@@ -24,6 +24,46 @@ public class AssetCreator : EditorWindow
         initMasken();
     }
 
+    [MenuItem("AssetCreator/Create Texture Maske Mitte")]
+    static void makeTextureMitte()
+    {
+        
+        Texture2D texture = new Texture2D(6598, 1200, TextureFormat.RGBA32,  false,  false); 
+        float tex_div_3 = texture.width/3f;
+        Color color_transparent = new Color(0,0,0,0f);
+        Color color_black = new Color(0,0,0,1f);
+
+        for (int y = 0; y < texture.height; y++)
+        {
+            for (int x = 0; x < texture.width; x++) // texture1.width
+            {
+                texture.SetPixel(x, y, color_black);
+                texture.SetPixel(x, y, color_black);
+                texture.SetPixel(x, y, color_black);
+            }
+        }
+
+        for (int y = 0; y < texture.height; y++)
+        {
+            for (int x = (int)(tex_div_3); x < tex_div_3*2; x++) // texture1.width
+            {
+               
+                texture.SetPixel(x, y, color_transparent);
+            }
+           
+        }
+
+        
+        var dirPath = Application.dataPath+"/" ;
+        if(!Directory.Exists(dirPath)) 
+        {
+            Directory.CreateDirectory(dirPath);
+        }
+        byte[] bytes1 = texture.EncodeToPNG();
+        File.WriteAllBytes(dirPath + "MaskeCamera4" + ".png", bytes1);
+
+    }
+
     private static void initMasken()
     {
            // init Masken
@@ -76,7 +116,7 @@ public class AssetCreator : EditorWindow
             }
            
         }
-        for (int y = 0; y < texture2.height; y++)
+        for (int y = 0; y < texture3.height; y++)
         {
             for (int x = (int)((tex_div_3)+(tex_div_3/2f)); x < texture3.width-(tex_div_3/2f); x++) // texture1.width
             {
