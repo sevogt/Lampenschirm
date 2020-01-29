@@ -221,6 +221,63 @@ public class AssetCreator : EditorWindow
 
     }
 
+    [MenuItem("AssetCreator/Create Rechteck")]
+    static void makeRechteck()
+    {
+        float width = 40;
+        float height = 20f; // kamera höhe
+        // seitenverhältnis gleich wie render texture intro 2:1
+
+        //Keep track of the currently selected GameObject(s)
+        GameObject rechteck = new GameObject("Rechteck");
+        rechteck.AddComponent<MeshFilter>();
+        rechteck.AddComponent<MeshRenderer>();
+
+        Mesh mesh = new Mesh();
+        rechteck.GetComponent<MeshFilter>().mesh = mesh;
+
+        // runden zu fixen zahlen.
+
+        // Randomly change vertices
+        Vector3[] vertices = new Vector3[6];
+        vertices[0]= new Vector3((-(width/2f)),(-height/2f),0);
+        vertices[1]= new Vector3((-(width/2f)),(height/2f),0);
+        vertices[2]= new Vector3((width/2f),(height/2f),0);
+        vertices[3]= new Vector3((-(width/2f)),(-height/2f),0);
+        
+        vertices[4]= new Vector3((width/2f),(height/2f),0);
+        
+        vertices[5]= new Vector3((width/2f),(-height/2f),0);
+
+        int[] newTriangles = new int[ 2*3];
+        newTriangles[0]=0;
+        newTriangles[1]=1;
+        newTriangles[2]=2;
+
+        newTriangles[3]=3;
+        newTriangles[4]=4;
+        newTriangles[5]=5;
+
+        Vector2[] uvs = new Vector2[6];
+
+        uvs[0] = new Vector2(0, 0);
+        uvs[1] = new Vector2(0, 1);
+        uvs[2] = new Vector2(1, 1);
+        uvs[3] = new Vector2(0, 0);
+        
+        uvs[4] = new Vector2(1, 1);
+        
+        uvs[5] = new Vector2(1, 0);
+
+        mesh.vertices = vertices; 
+        mesh.triangles = newTriangles;
+        mesh.uv = uvs;
+
+        mesh.RecalculateNormals();
+
+
+    }
+
     [MenuItem("AssetCreator/Create Zylinder")]
     static void makeZylinderSmall()
     {

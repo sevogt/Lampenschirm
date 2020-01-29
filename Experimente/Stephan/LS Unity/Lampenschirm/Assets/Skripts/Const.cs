@@ -12,15 +12,17 @@ public static class Const
 
     public static readonly int LEFT=1;
     public static readonly int RIGHT=-1; 
+
+    public static readonly float hitbox_radius=0.2f;
  
 
     public static readonly float startTimer = 6;
     public static readonly float camMovementTime=2f;
 
-    public static readonly float maxSpeed=0.5f;
+    public static readonly float maxSpeed=0.4f;
     public static readonly float maxSpeed_close_to_target=0.2f;
     
-    public static readonly float maxSpeed_flee=1.4f;
+    public static readonly float maxSpeed_flee=0.9f;
 
     public static readonly float acceleration_base=0.2f;
     public static readonly float acceleration_close=-0.2f;
@@ -37,11 +39,18 @@ public static class Const
     public static readonly float safety_margin = 0.8f;
     public static readonly float safety_margin2 = 1.6f;
 
-    public static readonly float world_limit_left = 9980.31f;
-    public static readonly float world_limit_right = 10020.68f;
+    public static readonly float visible_main_area_left = 9981f;
+    public static readonly float visible_main_area_right = 10019f;
+
+    public static readonly float visible_main_area_top = 10f;
+
+    public static readonly float visible_main_area_bottom = -10f;
 
     public static readonly float world_limit_top_hard = 35f;
     public static readonly float world_limit_bottom_hard = -20f;
+
+    public static readonly float world_limit_left_hard = 9945f;
+    public static readonly float world_limit_right_hard= 10055f;
 
     public static readonly float camOrtoPos1=0;
     public static readonly float camOrtoPos2=15;
@@ -51,5 +60,8 @@ public static class Const
     public static readonly int höhe = 400;
     public static readonly float height_zylinder = 0.4f;
     public static readonly int weite = 2199;
+
+    public static readonly float länge_texture=36.6f+2f;
     
 }
+

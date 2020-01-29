@@ -12,7 +12,7 @@ public class CameraRender : MonoBehaviour
     {
         nummer = gameObject.name.Substring(gameObject.name.Length-1);
         maske = GameObject.Find("/D2_Welt/ZylinderMaske"+nummer);
-        Debug.Log(nummer+"  "+nam);
+        // Debug.Log(nummer+"  "+nam);
         nam = maske.name;
   
     }
