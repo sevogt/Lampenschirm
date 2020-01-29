@@ -10,3 +10,5 @@ Library
 Compiled Program
 obj
 Temp
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
