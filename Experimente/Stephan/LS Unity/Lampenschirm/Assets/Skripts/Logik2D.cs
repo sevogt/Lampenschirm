@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using TMPro;
 
-public class Logik2D : MonoBehaviour
+public class Logik2D : MonoBehaviour, IDetektorListener
 {
     private GameObject aquarium;
 
@@ -75,7 +75,12 @@ public class Logik2D : MonoBehaviour
         s12 = 12
     };
 
+    private (float, float) last_detection_coords = (-1f, -1f);
 
+    public void recv_last_detection((float, float) last) {
+        last_detection_coords = last;
+        //Debug.Log("Last Detect: x: "+last.Item1.ToString()+" y: "+last.Item2.ToString());
+    }
 
     void Start()
     {
@@ -93,10 +98,10 @@ public class Logik2D : MonoBehaviour
         border_left = introCamera.transform.position.x-(camera_width/2f);
         border_right = introCamera.transform.position.x+(camera_width/2f);
 
-        Debug.Log(border_left);
-        Debug.Log(border_right);
+        //Debug.Log(border_left);
+        //Debug.Log(border_right);
         
-        Debug.Log(border_right-border_left);
+        //Debug.Log(border_right-border_left);
 
         //  110 / 3 / 2  10000 +- ergebnis für bereich sichtbarkeit.
 
@@ -157,6 +162,8 @@ public class Logik2D : MonoBehaviour
                 return false;         
             };
             intro_1= new ComplexAnimation(closure);
+
+            GameObject.Find("/Detektor").GetComponent<Detektor>().register_listener(this);
         }
 
             
@@ -1087,7 +1094,7 @@ public class Logik2D : MonoBehaviour
             int zacken_länge=150;
             int zacken_höhe=100;
 
-            Debug.Log(camHalfWidth);
+            //Debug.Log(camHalfWidth);
 
 
             Texture2D image= null;

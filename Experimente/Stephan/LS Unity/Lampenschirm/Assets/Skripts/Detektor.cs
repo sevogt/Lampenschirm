@@ -19,9 +19,12 @@ public class Detektor : MonoBehaviour
     public string LADDR = "127.0.0.1";
     public int LPORT = 54321;
 
+    List<IDetektorListener> listeners = new List<IDetektorListener>();
+
     void backgroundUDPCallback(IAsyncResult r) {
         var udpClient = (((UdpClient, IPEndPoint))(r.AsyncState)).Item1;
         var rSock = (((UdpClient, IPEndPoint))(r.AsyncState)).Item2;
+
         try {
             var recv_b = udpClient.EndReceive(r, ref rSock);
             var recv_s = Encoding.ASCII.GetString(recv_b).Split(' ');
@@ -53,6 +56,14 @@ public class Detektor : MonoBehaviour
         udpClient.Close();
     }
 
+    public void register_listener(IDetektorListener l) {
+        listeners.Add(l);
+    }
+
+    public void unregister_listener(IDetektorListener l) {
+        listeners.Remove(l);
+    }
+
     void Start()
     {
         backgroundUDP = new Thread(backgroundUDPProcess);
@@ -63,7 +74,8 @@ public class Detektor : MonoBehaviour
     {
         (float, float) elem;
         while(results.TryDequeue(out elem)) {
-            Debug.Log("A x: "+elem.Item1.ToString()+" y: "+elem.Item2.ToString());
+            //Debug.Log("A x: "+elem.Item1.ToString()+" y: "+elem.Item2.ToString());
+            listeners.ForEach(x => x.recv_last_detection(elem));
         }
     }
 
