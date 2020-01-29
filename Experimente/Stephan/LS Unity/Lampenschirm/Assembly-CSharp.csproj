@@ -59,6 +59,7 @@
      <Compile Include="Assets\Skripts\CameraRender.cs" />
      <Compile Include="Assets\Skripts\Const.cs" />
      <Compile Include="Assets\Skripts\D2_Welt.cs" />
+     <Compile Include="Assets\Skripts\Detektor.cs" />
      <Compile Include="Assets\Skripts\Fisch_simple_rotation.cs" />
      <Compile Include="Assets\Skripts\Gui_Logik2D.cs" />
      <Compile Include="Assets\Skripts\Logik2D.cs" />

@@ -35,7 +35,7 @@ public class BasisFischLogik : MonoBehaviour
 
     private GameObject hunting_target;
 
-    private int predatory_state=0; // 0 = normal entity 1 = predator 
+    public int predatory_state=0; // 0 = normal entity 1 = predator 
 
     private Fisch_simple_rotation basis_daten;
 

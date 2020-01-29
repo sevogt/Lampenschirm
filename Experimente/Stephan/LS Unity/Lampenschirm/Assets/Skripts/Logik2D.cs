@@ -162,14 +162,14 @@ public class Logik2D : MonoBehaviour
             
         {
 
-            float pre_start_timer = 4;
+            float pre_start_timer = 2;
             float intro_animation_timer = 8;
             float infinity_move_half = 5;
             float ball_timer = 2;
             
             var anifi = GameObject.Find("/intro_fisch0");
             anifi.GetComponent<Fisch_simple_rotation>().set_normal_orientation_left();
-            anifi.transform.position=new Vector3(10000,100,-1);
+           
         
             AnimationState intro_animation_state = AnimationState.s01;
 
@@ -221,6 +221,7 @@ public class Logik2D : MonoBehaviour
                     
                     if(pre_start_timer>0)
                     {
+                        anifi.transform.position=new Vector3(10000,100,-1);
                         pre_start_timer-=deltaTime;
                         intro_animation_state = AnimationState.s02;
                     }
@@ -481,7 +482,7 @@ public class Logik2D : MonoBehaviour
             float scale_speed_ntvb=(second_big_scale-1)/time_to_scale_big_2;
             float scale_speed_vbtn=(second_big_scale-1)/time_to_scale_normal;
 
-            float wave_start_befor_fraction=1f/2f;
+            float wave_start_befor_fraction=3f/4f;
 
             text_rotations prepareGO_text(String text, Color32 color)
             {
@@ -586,7 +587,9 @@ public class Logik2D : MonoBehaviour
             Vector3 move_dir = new Vector3(1,0,0);
 
             float subtext_time = 2;
-            float subtext_dist= 2f;
+            float subtext_dist= 2.2f;
+            float final_pos_z=-1.2f;
+
             float subtext_light_time = 6;
             float subtext_light_dist=6;
 
@@ -611,36 +614,38 @@ public class Logik2D : MonoBehaviour
 
 
 
-            void set_dynamic_fisch_light_color(Color32 set_color)
+            void set_dynamic_fisch_light_color(ref Color32 set_color,  float deltaTime)
             {
+                time_for_change_counter+=deltaTime;
                 if(time_for_change_counter >= time_for_change)
+                {
+                    time_for_change_counter=0;
+                    if(!flip_color_change)
                     {
-                        time_for_change_counter=0;
-                        if(!flip_color_change)
+                        if(set_color.r<start_color.r)
                         {
-                            if(set_color.r<start_color.r)
-                            {
-                                set_color.r+=1;
-                            }
-                            else
-                            {
-                                
-                                flip_color_change=true;
-                            }
-                            
+                            set_color.r+=1;
                         }
                         else
                         {
-                            if(set_color.r>ende_color.r)
-                            {
-                                set_color.r-=1;
-                            }
-                            else
-                            {
-                                flip_color_change=false;
-                            }
+                            
+                            flip_color_change=true;
+                        }
+                        
+                    }
+                    else
+                    {
+                        if(set_color.r>ende_color.r)
+                        {
+                            set_color.r-=1;
+                        }
+                        else
+                        {
+                            flip_color_change=false;
                         }
                     }
+                }
+                
             }
 
             Func<float, bool> closure = delegate(float deltaTime)
@@ -709,7 +714,9 @@ public class Logik2D : MonoBehaviour
                     // fishce und lciht machen mehrere kreisebewegungen 8 stück schnell in 6 sekunden ende auf mitte
                     time_for_change_counter+=deltaTime;
                     Color32 set_color =  intro_licht_l.GetComponent<Light>().color;
-                    set_dynamic_fisch_light_color(set_color); 
+                    
+                    set_dynamic_fisch_light_color(ref set_color,deltaTime); 
+                    
                     intro_licht_l.GetComponent<Light>().color=set_color;
                     intro_licht_r.GetComponent<Light>().color=set_color;
 
@@ -785,7 +792,7 @@ public class Logik2D : MonoBehaviour
                     // oder halooder partikel
 
                     Color32 set_color =  intro_licht_l.GetComponent<Light>().color;
-                    set_dynamic_fisch_light_color(set_color); 
+                    set_dynamic_fisch_light_color(ref set_color,deltaTime); 
                     intro_licht_l.GetComponent<Light>().color=set_color;
                     intro_licht_r.GetComponent<Light>().color=set_color;
 
@@ -804,7 +811,7 @@ public class Logik2D : MonoBehaviour
 
                         if(content.state ==-1 && intro_fisch_r.transform.position.x <= go.transform.position.x)
                         {
-                            go.transform.position= new Vector3(go.transform.position.x,go.transform.position.y,-1);
+                            go.transform.position= new Vector3(go.transform.position.x,go.transform.position.y,-1.2f);
                             content.state=0;
                         }
                         else if(content.state==0)
@@ -845,7 +852,7 @@ public class Logik2D : MonoBehaviour
 
                         if(content.state==-1 && intro_fisch_l.transform.position.x >=go.transform.position.x )
                         {
-                            go.transform.position= new Vector3(go.transform.position.x,go.transform.position.y,-1);
+                            go.transform.position= new Vector3(go.transform.position.x,go.transform.position.y,-1.2f);
                             content.state=0;
                         }
                         else if(content.state==0)
@@ -1021,7 +1028,7 @@ public class Logik2D : MonoBehaviour
 
                     if(adder == (text_right_active.Count+text_left_active.Count) )
                     {
-                        subtext.transform.position=new Vector3(10000,100-subtext_y_offset,1);
+                        subtext.transform.position=new Vector3(10000,100-subtext_y_offset,1f);
                         intro_licht_m.transform.position=new Vector3(10000,100-subtext_y_offset,1);
                         mitte_animation_state=AnimationState.s06;
                     }
@@ -1038,7 +1045,7 @@ public class Logik2D : MonoBehaviour
                     
                     temp.Scale(new Vector3(0,0,(subtext_t_speed*deltaTime)));
 
-                    if(subtext.transform.position.z >= -subtext_dist)
+                    if(subtext.transform.position.z >= final_pos_z)
                     {
                         subtext.transform.position+=temp;
                     }
@@ -1046,7 +1053,7 @@ public class Logik2D : MonoBehaviour
                     Vector3 temp2 = new Vector3(appear_dir.x,appear_dir.y,appear_dir.z);
                     temp2.Scale(new Vector3(0,0,(subtext_l_speed*deltaTime)));
 
-                    if(intro_licht_m.transform.position.z > -subtext_light_dist)
+                    if(intro_licht_m.transform.position.z >= -subtext_light_dist)
                     {
                         intro_licht_m.transform.position+=temp;
                     }
