@@ -14,8 +14,7 @@ CAM_H = 2160
 WIN_W = 1366
 WIN_H = 768
 CAM_DRIVER = cv2.CAP_DSHOW
-SHOW_IMG = True
-ALGO = "KNN"
+ALGO = "KNN" # "MOG2"
 CAM_ID = 0
 SRV_ADDR = "localhost"
 SRV_PORT = 54321
@@ -376,7 +375,7 @@ def get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub):
             return
 
 
-def detect(cap_s, t_mat, t_size, detection_params, back_sub, result_q):
+def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
     cap, cap_size = cap_s
     frame = np.zeros(cap_size, dtype=np.uint8)
     warp_frame = np.zeros(t_size, dtype=np.uint8)
@@ -456,7 +455,7 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, result_q):
 
             cv2.circle(warp_frame, (int(center_prc[0]*t_dim[0]), int(center_prc[1]*t_dim[1])), 3, col_yel,3)
             
-        result_q.put(center_prc)
+        results_q.put(center_prc)
         
         cv2.putText(warp_frame, "FPS: {:>3.2f}".format(avg_fps), pos_fps, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col_gre, 2)
         cv2.imshow(window_name, warp_frame)
@@ -498,10 +497,10 @@ def main():
                           [ 1.54955299e-05, -2.16240961e-05,  1.00000000e+00]], dtype=np.float32)
         t_size = (608, 970, 3)
 
-    if ALGO == 'MOG2':
+    if ALGO == "MOG2":
         back_sub = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
     else:
-        back_sub = cv2.createBackgroundSubtractorKNN(detectShadows=False)
+        back_sub = cv2.createBackgroundSubtractorKNN(history=1000, detectShadows=False)
 
     while True:
         detection_params = get_params_thresh_blur(
