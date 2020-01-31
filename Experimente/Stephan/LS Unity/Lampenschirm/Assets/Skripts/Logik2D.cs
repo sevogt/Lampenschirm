@@ -82,6 +82,8 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         //Debug.Log("Last Detect: x: "+last.Item1.ToString()+" y: "+last.Item2.ToString());
     }
 
+
+
     void Start()
     {
         aquarium = GameObject.Find("/D2_Welt/Aquarium");
@@ -98,24 +100,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         border_left = introCamera.transform.position.x-(camera_width/2f);
         border_right = introCamera.transform.position.x+(camera_width/2f);
 
-        //Debug.Log(border_left);
-        //Debug.Log(border_right);
-        
-        //Debug.Log(border_right-border_left);
-
-        //  110 / 3 / 2  10000 +- ergebnis für bereich sichtbarkeit.
-
-
-        prefab_vogel = Resources.Load<GameObject>("SpriteData/ezgif.com-gif-maker_0");
-
-        // for (int i = 0; i < camera_width; i++)
-        // {
-        //     for (int k = 0; k < camera_height; k++)
-        //     {
-        //         GameObject sprite = (GameObject)Instantiate(prefab_wasserbg,new Vector3(border_left+(i),border_down+(k),0) , Quaternion.identity);
-            
-        //     }
-        // }
+        init_all_fisch();
 
         {
             AnimationState intro_animation_state = AnimationState.s01;
@@ -365,13 +350,14 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                     point_on_ellipse = new Vector3(point_on_ellipse.x,point_on_ellipse.y,ball_Start_pos_z);
 
                     // set bird and balls
-                    GameObject ball = Instantiate(GameObject.Find("/Sphere"));
-                    ball.name="woball";
-                    ball.transform.position = point_on_ellipse;
+                    
                     
 
                     if(!flag_final)
                     {
+                        GameObject ball = Instantiate(GameObject.Find("/Sphere"));
+                        ball.name="woball";
+                        ball.transform.position = point_on_ellipse;
                         balls.Add(ball);
                     }
 
@@ -419,7 +405,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                     }
                     if(flag_all_done)
                     {
-                        for (int i = 0; i < balls.Count; i++)
+                        for (int i = balls.Count-1; i >=0; i--)
                         {
                             GameObject my_ball = (GameObject)balls[i];
                             Destroy(my_ball);
@@ -1441,4 +1427,15 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         }
         
     }
+
+    private void init_all_fisch()
+    {
+
+    }
+
+    private void population_control()
+    {
+        
+    }
+
 }

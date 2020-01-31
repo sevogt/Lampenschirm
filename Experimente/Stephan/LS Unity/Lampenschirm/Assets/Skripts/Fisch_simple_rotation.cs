@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Fisch_simple_rotation : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private int init_left = 2;
+    
     private bool is_flipped = false;
     private bool do_flip=true;
 
@@ -13,19 +12,16 @@ public class Fisch_simple_rotation : MonoBehaviour
 
     void Start()
     {
-        if (init_left == 0)
-        {
-            do_flip=false;
-        }
+
     }
 
     public void set_normal_orientation_left()
     {
-        init_left=1;
+        do_flip=true;
     }
     public void set_normal_orientation_right()
     {
-        init_left=0;
+        do_flip=false;
     }
 
     public void set_velocity(Vector3 vel)

@@ -62,6 +62,11 @@ public class BasisFischLogik : MonoBehaviour
         transform.position=start_pos;
         has_goal=true;
 
+        //goal z psotion is 0:  all fishc msut be at 0or so.
+        // bakcogrund bodne tiere mit animationen auf ebene -0.2f  oder so
+
+        // fehler2? keine beegung. gefangen an falschem ort.
+
         temp_velocity = goal-transform.position;
         temp_velocity.Normalize();
         temp_velocity.Scale(new Vector3(0.2f,0.2f,0.2f));
@@ -109,8 +114,7 @@ public class BasisFischLogik : MonoBehaviour
     {
         if(transform.position.x == interaction_position.x && transform.position.y == interaction_position.y)
         {
-            Destroy(gameObject);
-            // TODO fisch stirbt
+            state = 2;
         }
         else if( (interaction_position-transform.position).magnitude < Const.affected_radius )
         {
@@ -149,9 +153,14 @@ public class BasisFischLogik : MonoBehaviour
 
     void Update()
     {
+        
         if(state == 1)
         {
             temp_velocity = basis_daten.get_velocity();
+            // if(temp_velocity.magnitude==0)
+            // {
+            //     temp_velocity = new Vector3(1,0,0);
+            // }
 
             if(!has_goal)
             {
@@ -220,8 +229,12 @@ public class BasisFischLogik : MonoBehaviour
             }
 
             temp_velocity += dir_vec;
+            float scale_value = temp_velocity.magnitude*Time.deltaTime;
+            Vector3 delta_vel_vector = new Vector3(temp_velocity.x,temp_velocity.y,temp_velocity.z);
+            delta_vel_vector.Normalize();
+            delta_vel_vector.Scale(new Vector3(scale_value,scale_value,0));
 
-            transform.position+= temp_velocity;
+            transform.position+= delta_vel_vector;
 
             // test if goal reached
             // x koordiante wird getestet.
@@ -305,9 +318,8 @@ public class BasisFischLogik : MonoBehaviour
                     
                 }
             }
-            has_goal=true;
-            
         }
+        has_goal=true;
         
     }
 }
