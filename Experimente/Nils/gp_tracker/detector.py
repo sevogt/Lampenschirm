@@ -1,10 +1,9 @@
 
-from pprint import pprint
-
 import cv2
 import numpy as np
 import socket
 import math
+import time
 from multiprocessing import Process, SimpleQueue
 
 from pprint import pprint
@@ -15,15 +14,15 @@ CAM_H = 2160
 WIN_W = 1366
 WIN_H = 768
 CAM_DRIVER = cv2.CAP_DSHOW
-SHOW_IMG = True
-ALGO = "MOG2"
+ALGO = "KNN" # "MOG2"
 CAM_ID = 0
 SRV_ADDR = "localhost"
 SRV_PORT = 54321
 
 DEBUG = True
-if DEBUG:
-    CAM_ID = "D:\\gp_tracker\\Neuer Ordner\\test.avi"
+DEBUG2 = True
+if DEBUG2:
+    CAM_ID = "E:\\GP-A\\test.avi"
     CAM_DRIVER = ""
 
 
@@ -187,8 +186,8 @@ def get_params_thresh_blur(cap_s, t_mat, t_size, back_sub):
     fg_dilate = np.zeros((t_size[0], t_size[1], 1), dtype=np.uint8)
     t_dim = (t_size[1], t_size[0])
     
-    detection_params = {'eql_h': False, 'k_sz': (25, 25), 'thresh': 121, "sub_lr": -1, "dil": True,
-                         "dil_type": cv2.MORPH_RECT, "dil_k_sz": 4, "dil_iter": 3, "min_c_sz": 24*100}
+    detection_params = {'eql_h': False, 'k_sz': (21, 21), 'thresh': 124, "sub_lr": -1, "dil": False,
+                         "dil_type": cv2.MORPH_RECT, "dil_k_sz": 21, "dil_iter": 3, "min_c_sz": 9*100}
 
     window_name = "Einstellung Parameter"
     window_name_ctrl = "Kontrolle"
@@ -359,7 +358,7 @@ def get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub):
         else:
             np.copyto(fg_dilate, fg_mask)
 
-        _, cont, cont_h = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cont, _ = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         largest_cont = []
         for c in cont:
@@ -376,7 +375,7 @@ def get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub):
             return
 
 
-def detect(cap_s, t_mat, t_size, detection_params, back_sub, result_q):
+def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
     cap, cap_size = cap_s
     frame = np.zeros(cap_size, dtype=np.uint8)
     warp_frame = np.zeros(t_size, dtype=np.uint8)
@@ -394,6 +393,16 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, result_q):
     dil_struct_elem = cv2.getStructuringElement(detection_params["dil_type"], (2*detection_params["dil_k_sz"] + 1, 2 *
                                                 detection_params["dil_k_sz"]+1), (detection_params["dil_k_sz"], detection_params["dil_k_sz"]))
 
+    col_red = (0,0,255)
+    col_cya = (255,255,0)
+    col_yel = (0,255,255)
+    col_gre = (0,255,0)
+    selected_conts = []
+    frame_ctr = 0
+    avg_fps = -1
+    text_sz, _ = cv2.getTextSize("I", cv2.FONT_HERSHEY_SIMPLEX, 0.8, 2)
+    pos_fps = (int(text_sz[0]), int(text_sz[1]+text_sz[1]*0.5))
+    t_0 = time.monotonic()
     while True:
         ret, _ = cap.read(image=frame)
         if not ret:
@@ -411,63 +420,55 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, result_q):
         cv2.blur(hist_frame, detection_params["k_sz"], dst=blur_frame)
         _, _ = cv2.threshold(
             blur_frame, detection_params["thresh"], 255, cv2.THRESH_BINARY, dst=thresh_frame)
-        back_sub.apply(thresh_frame, fgmask=fg_mask,
-                       learningRate=detection_params["sub_lr"])
+        back_sub.apply(thresh_frame, fgmask=fg_mask, learningRate=detection_params["sub_lr"])
         if detection_params["dil"]:
             cv2.dilate(fg_mask, dil_struct_elem, dst=fg_dilate,
                        iterations=detection_params["dil_iter"])
         else:
             np.copyto(fg_dilate, fg_mask)
 
-        _, cont, cont_h = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cont, _ = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         main_cont = None
-        main_cont_area = -1
-        main_cont_center = None
         largest_cont = []
         centers_cont = []
+        selected_conts.clear()
         for c in cont:
-            cont_area = cv2.contourArea(c)
             moments = cv2.moments(c)
+            cont_area = moments["m00"]
             if cont_area > detection_params["min_c_sz"]:
-                largest_cont.append(c)
-                moments = cv2.moments(c)
-                c_cont = (int(moments['m10']/moments['m00']), int(moments['m01']/moments['m00']))
-                centers_cont.append(c_cont)
-                if main_cont is None or main_cont_area < cont_area:
-                    main_cont = c
-                    main_cont_area = cont_area
-                    main_cont_center = c_cont
+                x_cont = int(moments["m10"]/moments["m00"])
+                y_cont = int(moments["m01"]/moments["m00"])
+                cont_t = (c, x_cont, y_cont, cont_area)
+                selected_conts.append(cont_t)
+                
+                if main_cont is None or main_cont[3] < cont_area:
+                    main_cont = cont_t
 
         if main_cont is not None:
-            bounding_boxes = []
-            max_ratio_box_idx = -1
-            max_ratio = -1
-            for i in range(len(largest_cont)):
-                bounding_box = cv2.minAreaRect(largest_cont[i])
-                bounding_boxes.append(bounding_box)
-                ratio = max(bounding_box[1]) / min(bounding_box[1])
-                if ratio > max_ratio:
-                    max_ratio = ratio
-                    max_ratio_box = i
-                box = cv2.boxPoints(bounding_box)
-                box = np.int0(box)
-                cv2.drawContours(warp_frame,[box],0,(0,0,255),2)
-
-            box = cv2.boxPoints(bounding_boxes[max_ratio_box_idx])
-            box = np.int0(box)
-            cv2.drawContours(warp_frame,[box],0,(0,255,0),2)
             
-            center_prc = (min((float(centers_cont[max_ratio_box_idx][0])/float(t_dim[0]), 1.)),
-                          min((float(centers_cont[max_ratio_box_idx][1])/float(t_dim[1]), 1.)))
+            cv2.drawContours(warp_frame, [x[0] for x in selected_conts], -1, col_cya, 2)
+            cv2.drawContours(warp_frame, [main_cont[0]], -1, col_red, 2)
 
-            cv2.circle(warp_frame, (int(center_prc[0]*t_dim[0]), int(center_prc[1]*t_dim[1])), 3, (0,255,255),3)
+            center_prc = (min((float(main_cont[1])/float(t_dim[0]), 1.)),
+                          min((float(main_cont[2])/float(t_dim[1]), 1.)))
+
+            cv2.circle(warp_frame, (int(center_prc[0]*t_dim[0]), int(center_prc[1]*t_dim[1])), 3, col_yel,3)
             
-        result_q.put(center_prc)
+        results_q.put(center_prc)
+        
+        cv2.putText(warp_frame, "FPS: {:>3.2f}".format(avg_fps), pos_fps, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col_gre, 2)
         cv2.imshow(window_name, warp_frame)
         wait_key = cv2.waitKey(1)
         if wait_key == ord('q'):
             break
+
+        frame_ctr+=1
+        t_1 = time.monotonic()
+        if(t_1 - t_0 > 0.5):
+            avg_fps = frame_ctr / (t_1 - t_0)
+            frame_ctr = 0
+            t_0 = t_1
         
     cv2.destroyAllWindows()
 
@@ -491,15 +492,15 @@ def main():
             break
 
     if DEBUG:
-        t_mat = np.array([[1.02724247e+00, -5.05201217e-03, -1.28678118e+03],
-                          [3.17488226e-03,  1.02654526e+00, -7.02038432e+02],
-                          [1.81218700e-06,  1.88211898e-05,  1.00000000e+00]], dtype=np.float32)
-        t_size = (611, 981, 3)
+        t_mat = np.array([[ 1.01856022e+00, -3.91099919e-02, -1.25259952e+03],
+                          [ 6.21716294e-03,  1.00510801e+00, -6.94297526e+02],
+                          [ 1.54955299e-05, -2.16240961e-05,  1.00000000e+00]], dtype=np.float32)
+        t_size = (608, 970, 3)
 
-    if ALGO == 'MOG2':
+    if ALGO == "MOG2":
         back_sub = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
     else:
-        back_sub = cv2.createBackgroundSubtractorKNN(detectShadows=False)
+        back_sub = cv2.createBackgroundSubtractorKNN(history=1000, detectShadows=False)
 
     while True:
         detection_params = get_params_thresh_blur(
@@ -508,9 +509,9 @@ def main():
             break
 
     get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub)
-    if DEBUG:
-        detection_params = {'eql_h': False, 'k_sz': (
-            25, 25), 'thresh': 121, "sub_lr": -1, "dil": True, "dil_type": cv2.MORPH_RECT, "dil_k_sz": 4, "dil_iter": 3, "min_c_sz": 24*100}
+    #if DEBUG:
+    #    detection_params = {'eql_h': False, 'k_sz': (
+    #        25, 25), 'thresh': 121, "sub_lr": -1, "dil": True, "dil_type": cv2.MORPH_RECT, "dil_k_sz": 4, "dil_iter": 3, "min_c_sz": 24*100}
 
     results_q = SimpleQueue()
     server_process = Process(target=send_results, args=(results_q,))
