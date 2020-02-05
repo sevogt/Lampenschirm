@@ -1336,7 +1336,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
             case State.init_wait:
                 if (init_wait())
                 {
-                    state = State.normal_play;  // intro_1
+                    state = State.intro_1;  // intro_1
                 }
                 break;
 
@@ -1526,8 +1526,8 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                 
 
             var pointde = GameObject.Find("/pointde");
-            pointde.transform.position=new Vector3(apoint.x,apoint.y,-1);
-            // Debug.Log(breite);
+            // pointde.transform.position=new Vector3(apoint.x,apoint.y,-1);
+            
             for (int i = 0; i < fische.Count; i++)
             {
                 GameObject fisch = (GameObject)fische[i];
