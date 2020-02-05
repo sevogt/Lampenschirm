@@ -16,7 +16,8 @@ WIN_H = 768
 CAM_DRIVER = cv2.CAP_DSHOW
 ALGO = "KNN" # "MOG2"
 CAM_ID = 0
-SRV_ADDR =  "192.168.1.71"
+#SRV_ADDR =  "192.168.1.71"
+SRV_ADDR =  "localhost"
 SRV_PORT = 54321
 
 DEBUG = False
@@ -412,84 +413,90 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
     avg_fps = -1
     text_sz, _ = cv2.getTextSize("I", cv2.FONT_HERSHEY_SIMPLEX, 0.8, 2)
     pos_fps = (int(text_sz[0]), int(text_sz[1]+text_sz[1]*0.5))
+    pos_dstp = ((int(text_sz[0]), pos_fps[1] + int(text_sz[1]+text_sz[1]*0.5)))
     t_0 = time.monotonic()
+    pause_detection = False
     while True:
         ret, _ = cap.read(image=frame)
         if not ret:
             print("Err 9")
             exit(1)
-
+        
         center_prc = center_not_found
 
         cv2.warpPerspective(frame, t_mat, t_dim, dst=warp_frame)
-        cv2.cvtColor(warp_frame, cv2.COLOR_BGR2GRAY, dst=grey_frame)
-        if detection_params["eql_h"]:
-            cv2.equalizeHist(grey_frame, dst=hist_frame)
-        else:
-            np.copyto(hist_frame, grey_frame)
-        cv2.blur(hist_frame, detection_params["k_sz"], dst=blur_frame)
-        _, _ = cv2.threshold(
-            blur_frame, detection_params["thresh"], 255, cv2.THRESH_BINARY, dst=thresh_frame)
-        back_sub.apply(thresh_frame, fgmask=fg_mask, learningRate=detection_params["sub_lr"])
-        if detection_params["dil"]:
-            cv2.dilate(fg_mask, dil_struct_elem, dst=fg_dilate,
-                       iterations=detection_params["dil_iter"])
-        else:
-            np.copyto(fg_dilate, fg_mask)
-
-        cont, _ = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        main_cont = None
-        largest_cont = []
-        centers_cont = []
-        selected_conts.clear()
-        x_weight = 0
-        y_weight = 0
-        for c in cont:
-            moments = cv2.moments(c)
-            cont_area = moments["m00"]
-            if cont_area > detection_params["min_c_sz"]:
-                x_cont = int(moments["m10"]/moments["m00"])
-                y_cont = int(moments["m01"]/moments["m00"])
-                x_weight += (x_cont - t_dim[0]/2) * cont_area
-                y_weight += (y_cont - t_dim[1]/2) * cont_area
-                cont_t = (c, x_cont, y_cont, cont_area)
-                selected_conts.append(cont_t)
-                
-                if main_cont is None or main_cont[3] < cont_area:
-                    main_cont = cont_t
-
-        if main_cont is not None:
-
-            cv2.drawContours(warp_frame, [x[0] for x in selected_conts], -1, col_cya, 2)
-            cv2.drawContours(warp_frame, [main_cont[0]], -1, col_red, 2)
-
-            if x_weight >= 0 and y_weight >= 0:
-                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1]) + np.square(c[2]) ) )
-                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] ) + np.square( cont_a[0][:,:,1] ) ) ) ), 0, ]
-            elif x_weight >= 0 and y_weight < 0:
-                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1]) + np.square(c[2] - t_dim[1]) ) )
-                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] ) + np.square( cont_a[0][:,:,1] - t_dim[1] ) ) ) ), 0, ]
-            elif x_weight < 0 and y_weight >= 0:
-                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1] - t_dim[0]) + np.square(c[2]) ) )
-                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] - t_dim[0] ) + np.square( cont_a[0][:,:,1] ) ) ) ), 0, ]
+        
+        if not pause_detection:    
+            cv2.cvtColor(warp_frame, cv2.COLOR_BGR2GRAY, dst=grey_frame)
+            if detection_params["eql_h"]:
+                cv2.equalizeHist(grey_frame, dst=hist_frame)
             else:
-                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1] - t_dim[0]) + np.square(c[2] - t_dim[1]) ) )
-                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] - t_dim[0] ) + np.square( cont_a[0][:,:,1] - t_dim[1] ) ) ) ), 0, ]
-                
-            #Mid
-            #center_prc = (min((float(main_cont[1])/float(t_dim[0]), 1.)),
-            #              min((float(main_cont[2])/float(t_dim[1]), 1.)))
+                np.copyto(hist_frame, grey_frame)
+            cv2.blur(hist_frame, detection_params["k_sz"], dst=blur_frame)
+            _, _ = cv2.threshold(
+                blur_frame, detection_params["thresh"], 255, cv2.THRESH_BINARY, dst=thresh_frame)
+            back_sub.apply(thresh_frame, fgmask=fg_mask, learningRate=detection_params["sub_lr"])
+            if detection_params["dil"]:
+                cv2.dilate(fg_mask, dil_struct_elem, dst=fg_dilate,
+                        iterations=detection_params["dil_iter"])
+            else:
+                np.copyto(fg_dilate, fg_mask)
 
-            #Ext Cont
-            #center_prc = (min((float(cont_a[1])/float(t_dim[0]), 1.)),
-            #              min((float(cont_a[2])/float(t_dim[1]), 1.)))
+            cont, _ = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-            #Ext Point
-            center_prc = (min((float(x_sel)/float(t_dim[0]), 1.)),
-                          min((float(y_sel)/float(t_dim[1]), 1.)))
+            main_cont = None
+            largest_cont = []
+            centers_cont = []
+            selected_conts.clear()
+            x_weight = 0
+            y_weight = 0
+            for c in cont:
+                moments = cv2.moments(c)
+                cont_area = moments["m00"]
+                if cont_area > detection_params["min_c_sz"]:
+                    x_cont = int(moments["m10"]/moments["m00"])
+                    y_cont = int(moments["m01"]/moments["m00"])
+                    x_weight += (x_cont - t_dim[0]/2) * cont_area
+                    y_weight += (y_cont - t_dim[1]/2) * cont_area
+                    cont_t = (c, x_cont, y_cont, cont_area)
+                    selected_conts.append(cont_t)
+                    
+                    if main_cont is None or main_cont[3] < cont_area:
+                        main_cont = cont_t
 
-            cv2.circle(warp_frame, (int(center_prc[0]*t_dim[0]), int(center_prc[1]*t_dim[1])), 3, col_yel,3)
+            if main_cont is not None:
+
+                cv2.drawContours(warp_frame, [x[0] for x in selected_conts], -1, col_cya, 2)
+                cv2.drawContours(warp_frame, [main_cont[0]], -1, col_red, 2)
+
+                if x_weight >= 0 and y_weight >= 0:
+                    cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1]) + np.square(c[2]) ) )
+                    x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] ) + np.square( cont_a[0][:,:,1] ) ) ) ), 0, ]
+                elif x_weight >= 0 and y_weight < 0:
+                    cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1]) + np.square(c[2] - t_dim[1]) ) )
+                    x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] ) + np.square( cont_a[0][:,:,1] - t_dim[1] ) ) ) ), 0, ]
+                elif x_weight < 0 and y_weight >= 0:
+                    cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1] - t_dim[0]) + np.square(c[2]) ) )
+                    x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] - t_dim[0] ) + np.square( cont_a[0][:,:,1] ) ) ) ), 0, ]
+                else:
+                    cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1] - t_dim[0]) + np.square(c[2] - t_dim[1]) ) )
+                    x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] - t_dim[0] ) + np.square( cont_a[0][:,:,1] - t_dim[1] ) ) ) ), 0, ]
+                    
+                #Mid
+                #center_prc = (min((float(main_cont[1])/float(t_dim[0]), 1.)),
+                #              min((float(main_cont[2])/float(t_dim[1]), 1.)))
+
+                #Ext Cont
+                #center_prc = (min((float(cont_a[1])/float(t_dim[0]), 1.)),
+                #              min((float(cont_a[2])/float(t_dim[1]), 1.)))
+
+                #Ext Point
+                center_prc = (min((float(x_sel)/float(t_dim[0]), 1.)),
+                            min((float(y_sel)/float(t_dim[1]), 1.)))
+
+                cv2.circle(warp_frame, (int(center_prc[0]*t_dim[0]), int(center_prc[1]*t_dim[1])), 3, col_yel,3)
+        else:
+            cv2.putText(warp_frame, "DETECTION STOPPED", pos_dstp, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col_gre, 2)
 
         results_q.put(center_prc)
         
@@ -498,6 +505,8 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
         wait_key = cv2.waitKey(1)
         if wait_key == ord('q'):
             break
+        elif wait_key == ord('p'):
+            pause_detection = not pause_detection
 
         frame_ctr+=1
         t_1 = time.monotonic()
