@@ -13,34 +13,46 @@ public static class Const
     public static readonly int LEFT=1;
     public static readonly int RIGHT=-1; 
 
-    public static readonly float hitbox_radius=0.2f;
+    public static readonly float hitbox_radius=0.7f;
  
 
     public static readonly float startTimer = 6;
     public static readonly float camMovementTime=2f;
 
-    public static readonly float maxSpeed=0.4f;
+    public static readonly float maxSpeed=4.1f;
     public static readonly float maxSpeed_close_to_target=0.2f;
     
-    public static readonly float maxSpeed_flee=0.9f;
+    public static readonly float maxSpeed_flee=7.9f;
 
     public static readonly float acceleration_base=0.2f;
     public static readonly float acceleration_close=-0.2f;
-    public static readonly float acceleration_flee=0.5f;
 
-    public static readonly float run_away_time = 1f; // sekunde
+    public static readonly Vector3 calibration_pos = new Vector3(10000,-50,-2);
+    public static readonly Vector3 start_intro_pos = new Vector3(10000,200,-2);
+    
+    public static readonly float acceleration_flee=1.7f;
+    public static readonly float flee_add_x=30f;
 
-    public static readonly float affected_radius = 0.4f;
+    public static readonly float deletion_time=20f;
+
+    
+    
+
+    public static readonly float run_away_time = 3f; // sekunde
+
+    public static readonly float affected_radius = 5.4f;
 
     public static readonly float flee_distance = 5f;
 
-    public static readonly float wassergrenze_oben = 13.2f;
-    public static readonly float wassergrenze_unten = -12f;
+    public static readonly float wassergrenze_oben = 10.2f;
+    public static readonly float wassergrenze_unten = -11f;
     public static readonly float safety_margin = 0.8f;
     public static readonly float safety_margin2 = 1.6f;
 
-    public static readonly float visible_main_area_left = 9981f;
-    public static readonly float visible_main_area_right = 10019f;
+    public static readonly float margin_welt_seiten = 9f;
+
+    public static readonly float visible_main_area_left = 9981f-margin_welt_seiten;
+    public static readonly float visible_main_area_right = 10019f+margin_welt_seiten;
 
     public static readonly float visible_main_area_top = 10f;
 

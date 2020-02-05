@@ -5,29 +5,36 @@ using UnityEngine;
 public class BasisFischLogik : MonoBehaviour
 {
 
-    private float acceleration = 0.55f;
-    private float decceleration = -0.15f;
+    private float acceleration = 5.2f;
+    private float decceleration = 5.7f;
+
+    private float min_speed = 0.8f;
+
+    public bool do_debug=false;
+
+    private float init_wait=4f;
     
     private Vector3 temp_velocity = new Vector3(0,0,0);
     private Vector3 goal = new Vector3(30,1,0);
-    private Vector3 start_pos=new Vector3(0,0,0);
 
-    private float acceleraiotn_time=0.5f;
+    private bool is_bg=false;
+    
+
+    private float acceleraiotn_time=0.4f;
 
     private float acceleration_timer=0;
 
 
     private bool boost = false;
-    private bool close_to_target = false;
-
+  
     private float run_time_left = Const.run_away_time;
 
     private float innate_top_speed_flee;
     private float innate_top_speed_base;
     private float innate_top_speed_close;
 
-    public int state = 1;
-    private float deletion_time_after_death=4;
+    private  int state = 0;
+    private float deletion_time_after_death=Const.deletion_time;
 
     private bool has_target=false;
 
@@ -41,10 +48,24 @@ public class BasisFischLogik : MonoBehaviour
 
     private Logik2D logik2D;
 
+    private Color32 innate_color;
+
     public void set_as_predator()
     {
         predatory_state=1;
     }
+
+    public void set_state_killed()
+    {
+        state=2;
+    }
+
+    public int get_state()
+    {
+        return state;
+    }
+
+    
 
     void Start()
     {
@@ -54,10 +75,22 @@ public class BasisFischLogik : MonoBehaviour
 
 
         innate_top_speed_flee = Const.maxSpeed_flee+  Random.Range(-0.3f,0.3f);
-        innate_top_speed_base = Const.maxSpeed+  Random.Range(-0.15f,0.15f);
+        innate_top_speed_base = Const.maxSpeed+  Random.Range(-1.0f,1.0f);
         innate_top_speed_close = Const.maxSpeed_close_to_target+  Random.Range(-0.08f,0.08f);
+
+        init_wait = init_wait+ Random.Range(-0.9f,0.8f);
+
+        min_speed =(1f/3f) * innate_top_speed_base;
+
+        innate_color = gameObject.GetComponent<SpriteRenderer>().color;
+
+        if(predatory_state==1)
+        {
+            acceleration+=1.5f;
+            innate_top_speed_base+=2;
+        }
         
-        start_pos = rand_pos();
+        Vector3 start_pos = rand_pos();
         new_target();
         transform.position=start_pos;
         has_goal=true;
@@ -77,6 +110,13 @@ public class BasisFischLogik : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         basis_daten.set_velocity(temp_velocity);
+
+        if(is_bg)
+        {
+            innate_top_speed_base=innate_top_speed_base/2f;
+            acceleration=acceleration/2f;
+            decceleration=decceleration/2f;
+        }
     }
 
     // sehr hart eingrenzen, wo alles die welt ist, wo alles sichtbar ist.
@@ -110,31 +150,55 @@ public class BasisFischLogik : MonoBehaviour
 
     // use input to scatter or spawn fisch or create food.
 
+    public void set_as_bg()
+    {
+        is_bg=true;
+       
+    }
+
     public void flee_affected(Vector3 interaction_position)
     {
+        if(boost || is_bg)
+        {
+            return;
+        }
         if(transform.position.x == interaction_position.x && transform.position.y == interaction_position.y)
         {
-            state = 2;
+            // state = 2;
         }
         else if( (interaction_position-transform.position).magnitude < Const.affected_radius )
         {
             boost = true;
             run_time_left = Const.run_away_time;
+            this.GetComponent<SpriteRenderer>().color=new Color32(200,20,30,255);
+            has_goal=true;
+            has_target=false;
 
-            Vector3 new_pos = (transform.position-interaction_position);
-            new_pos.Normalize();
-
-            new_pos.Scale(new Vector3(Const.flee_distance,Const.flee_distance,Const.flee_distance));
-
-            new_pos = transform.position + new_pos;
-            if(new_pos.y>Const.wassergrenze_oben)
+            if(transform.position.x>=interaction_position.x)
             {
-                new_pos.y=Const.wassergrenze_unten-(Const.safety_margin);
+                goal.x+=Const.flee_add_x;
             }
-            else if(new_pos.y<Const.wassergrenze_unten)
+            else
             {
-                new_pos.y=Const.wassergrenze_unten+(Const.safety_margin);
+                goal.x-=Const.flee_add_x;
             }
+            goal.y=Random.Range(-9f,9f);
+
+
+            // Vector3 new_pos = (transform.position-interaction_position);
+            // new_pos.Normalize();
+
+            // new_pos.Scale(new Vector3(Const.flee_distance,Const.flee_distance,Const.flee_distance));
+
+            // new_pos = transform.position + new_pos;
+            // if(new_pos.y>Const.wassergrenze_oben)
+            // {
+            //     new_pos.y=Const.wassergrenze_unten-(Const.safety_margin);
+            // }
+            // else if(new_pos.y<Const.wassergrenze_unten)
+            // {
+            //     new_pos.y=Const.wassergrenze_unten+(Const.safety_margin);
+            // }
 
         }
 
@@ -146,15 +210,23 @@ public class BasisFischLogik : MonoBehaviour
     {
         return new Vector3(
             Random.Range(Const.visible_main_area_left+(Const.safety_margin2), Const.visible_main_area_right-(Const.safety_margin2)),
-            Random.Range(Const.wassergrenze_oben-(Const.safety_margin2), Const.world_limit_bottom_hard+(Const.safety_margin2)),
-            0f);
+            Random.Range(Const.wassergrenze_oben-(Const.safety_margin2), Const.wassergrenze_unten+(Const.safety_margin2)),
+            transform.position.z);
     }
     // Update is called once per frame
 
     void Update()
     {
-        
-        if(state == 1)
+     
+        if(state==0)
+        {
+            init_wait-=Time.deltaTime;
+            if(init_wait<0)
+            {
+                state=1;
+            }
+        }
+        else if(state == 1)
         {
             temp_velocity = basis_daten.get_velocity();
             // if(temp_velocity.magnitude==0)
@@ -162,18 +234,18 @@ public class BasisFischLogik : MonoBehaviour
             //     temp_velocity = new Vector3(1,0,0);
             // }
 
+            
+
             if(!has_goal)
             {
+                
                 if(has_target)
                 {
-                    start_pos = hunting_target.transform.position;
-                    hunting_target.GetComponent<BasisFischLogik>().state=2;
+                    hunting_target.GetComponent<BasisFischLogik>().set_state_killed();
                 }
-                else
-                {
-                    start_pos = goal;
-                }
-                new_target();      
+                
+                new_target();  
+                 
             }
 
             // lock on target
@@ -189,20 +261,32 @@ public class BasisFischLogik : MonoBehaviour
             
 
             Vector3 dir_vec = temp_goal-transform.position;
-            float dist_to_target = dir_vec.magnitude;
+            // float dist_to_target = dir_vec.magnitude;
+            float mag_acc=0;
             dir_vec.Normalize();
             {
-                float mag_acc=0;
+                
+                mag_acc+=acceleration;
                 acceleration_timer+= Time.deltaTime;
                 if(acceleration_timer<acceleraiotn_time)
                 {
                     mag_acc+=acceleration;
                 }
-                else if(acceleration_timer>=2*acceleraiotn_time)
+                else if(acceleration_timer>=1.5*acceleraiotn_time)
                 {
                     acceleration_timer=0;
                 }
-                mag_acc+=decceleration;
+                else
+                {
+                    // mag_acc-=decceleration;
+                }
+               
+                // else
+                // {
+                //     dir_vec = new Vector3(-dir_vec.x,-dir_vec.y,0);
+                //     mag_acc+=decceleration;
+                // }
+                
 
                 if(boost)
                 {
@@ -214,27 +298,70 @@ public class BasisFischLogik : MonoBehaviour
                     {
                         run_time_left=Const.run_away_time;
                         boost=false;
+                        this.GetComponent<SpriteRenderer>().color= innate_color;
 
                     }
 
                 }
                 
-                if(temp_velocity.magnitude> innate_top_speed_base || temp_velocity.magnitude> innate_top_speed_flee)
-                {
-                    mag_acc=Const.acceleration_close;
-                }
+                // if(temp_velocity.magnitude> innate_top_speed_base || temp_velocity.magnitude> innate_top_speed_flee)
+                // {
+                //     mag_acc=Const.acceleration_close;
+                // }
                 mag_acc*=Time.deltaTime;
                 dir_vec.Scale(new Vector3(mag_acc,mag_acc,0)); 
+
     
             }
 
-            temp_velocity += dir_vec;
+            
+            if(temp_velocity.magnitude+mag_acc <temp_velocity.magnitude  && temp_velocity.magnitude+mag_acc< min_speed)
+            {
+                temp_velocity.Normalize();
+                temp_velocity.Scale(new Vector3(min_speed,min_speed,min_speed));
+            }
+            else
+            {
+                temp_velocity += dir_vec;
+            }
+            
+            float speed = temp_velocity.magnitude;
+            if(boost )
+            {
+                if( speed>=innate_top_speed_flee)
+                {
+                    temp_velocity.Normalize();
+                    temp_velocity.Scale(new Vector3(innate_top_speed_flee,innate_top_speed_flee,innate_top_speed_flee));
+                }
+            }
+            else if(temp_velocity.magnitude>=innate_top_speed_base)
+            {
+                temp_velocity.Normalize();
+                temp_velocity.Scale(new Vector3(innate_top_speed_base,innate_top_speed_base,innate_top_speed_base));
+            }
+           
             float scale_value = temp_velocity.magnitude*Time.deltaTime;
             Vector3 delta_vel_vector = new Vector3(temp_velocity.x,temp_velocity.y,temp_velocity.z);
             delta_vel_vector.Normalize();
             delta_vel_vector.Scale(new Vector3(scale_value,scale_value,0));
 
             transform.position+= delta_vel_vector;
+
+            if(transform.position.y>=Const.wassergrenze_oben  )
+            {
+                Vector3 pos_alt = transform.position;
+                pos_alt.y=Const.wassergrenze_oben-Const.safety_margin2;
+                transform.position= pos_alt;
+                temp_velocity.y= -temp_velocity.y;
+            }
+            if( transform.position.y<=Const.wassergrenze_unten)
+            {
+                Vector3 pos_alt = transform.position;
+                pos_alt.y=Const.wassergrenze_unten+Const.safety_margin2;
+                transform.position= pos_alt;
+                temp_velocity.y= -temp_velocity.y;
+            }
+      
 
             // test if goal reached
             // x koordiante wird getestet.
@@ -260,6 +387,21 @@ public class BasisFischLogik : MonoBehaviour
                 
             // }
             this.GetComponent<Renderer>().enabled=false;
+            float teleport=45;
+            
+            GameObject explosion_sprite =  (GameObject)Resources.Load("Prefab/exp1_0");
+            Instantiate(explosion_sprite,transform.position,Quaternion.identity);
+            if(Random.Range(0,2)==0)
+            {
+                transform.position=new Vector3(10000-teleport,Random.Range(-5f,5f),transform.position.z);
+            }
+            else
+            {
+                transform.position=new Vector3(10000+teleport,Random.Range(-5f,5f),transform.position.z);
+            }
+
+
+            
             state=3;
 
             
@@ -269,12 +411,20 @@ public class BasisFischLogik : MonoBehaviour
             deletion_time_after_death-=Time.deltaTime;
             if(deletion_time_after_death<=0)
             {
-                Destroy(gameObject);
+                deletion_time_after_death=Const.deletion_time;
+                this.GetComponent<Renderer>().enabled=true;
+                has_goal=false;
+                has_target=false;
+                state=1;
             }
         }
 
         basis_daten.set_velocity(temp_velocity);
 
+    }
+
+    void OnDestroy() {
+        Debug.Log("toot");
     }
 
     private void new_target()
@@ -286,8 +436,10 @@ public class BasisFischLogik : MonoBehaviour
 
         has_target=false;
         
+        
         // goal;
         bool predatoring=true;
+        Vector3 start_pos = transform.position;
         while(true)
         {
             if(predatory_state==1  && predatoring)

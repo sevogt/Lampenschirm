@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4284208422593247106
+--- !u!1 &7447455967603967319
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4284208422593247105}
-  - component: {fileID: 4284208422593247104}
-  - component: {fileID: 4284208422593247107}
-  - component: {fileID: 6821461639131275095}
-  - component: {fileID: 5796087176422756772}
+  - component: {fileID: 7447455968689768389}
+  - component: {fileID: 7447455967603967315}
+  - component: {fileID: 7447455967603967314}
+  - component: {fileID: 7447455967603967317}
+  - component: {fileID: 7447455967603967316}
   m_Layer: 0
   m_Name: FischStreifenPG
   m_TagString: Untagged
@@ -20,27 +20,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4284208422593247105
+--- !u!4 &7447455968689768389
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4284208422593247106}
+  m_GameObject: {fileID: 7447455967603967319}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0025400391, y: -0.3306259, z: 0}
-  m_LocalScale: {x: 0.0001564611, y: 0.004749065, z: 1}
+  m_LocalPosition: {x: 10010.16, y: -1.5200005, z: 0}
+  m_LocalScale: {x: 0.6258444, y: 0.59638757, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4284208422593247104
+--- !u!212 &7447455967603967315
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4284208422593247106}
+  m_GameObject: {fileID: 7447455967603967319}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_Sprite: {fileID: -7168070526894165938, guid: bfaa52eb3a195441083f0081304e0077,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 3.6, y: 3.34}
@@ -84,14 +84,14 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &4284208422593247107
+--- !u!95 &7447455967603967314
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4284208422593247106}
+  m_GameObject: {fileID: 7447455967603967319}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: b3b6a7a8f3db847759f3184ec1670121, type: 2}
@@ -103,29 +103,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6821461639131275095
+--- !u!114 &7447455967603967317
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4284208422593247106}
+  m_GameObject: {fileID: 7447455967603967319}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a51c345ff32c8194db6fd8160b2668bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5796087176422756772
+  do_flip: 0
+--- !u!114 &7447455967603967316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4284208422593247106}
+  m_GameObject: {fileID: 7447455967603967319}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f795e8bd6a24574a9303fb984fe98e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  do_debug: 0
   state: 1
   predatory_state: 0

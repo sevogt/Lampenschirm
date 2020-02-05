@@ -16,9 +16,9 @@ public class D2_Welt : MonoBehaviour
     {
         Time.timeScale = 0;
         aquarium = GameObject.Find("/D2_Welt/Aquarium");
-        camera1 = GameObject.Find("/D2_Welt/Camera1").GetComponent<Camera>();
-        camera2 = GameObject.Find("/D2_Welt/Camera2").GetComponent<Camera>();
-        camera3 = GameObject.Find("/D2_Welt/Camera3").GetComponent<Camera>();
+        // camera1 = GameObject.Find("/D2_Welt/Camera1").GetComponent<Camera>();
+        // camera2 = GameObject.Find("/D2_Welt/Camera2").GetComponent<Camera>();
+        // camera3 = GameObject.Find("/D2_Welt/Camera3").GetComponent<Camera>();
         
         camera4 = GameObject.Find("/D2_Welt/Camera4").GetComponent<Camera>();
 
@@ -45,9 +45,9 @@ public class D2_Welt : MonoBehaviour
 
         CamData[] camData= parseData("text");
         
-        setup_camera(camera1,camData[0], 0); 
-        setup_camera(camera2,camData[1],-120);
-        setup_camera(camera3,camData[2],-240);
+        // setup_camera(camera1,camData[0], 0); 
+        // setup_camera(camera2,camData[1],-120);
+        // setup_camera(camera3,camData[2],-240);
         
         setup_camera(camera4,camData[3],0);
 

@@ -31,8 +31,10 @@ public class Logik2D : MonoBehaviour, IDetektorListener
     private Camera sprite_camera;
 
     private ArrayList fische = new ArrayList();
+    private ArrayList fische_bg = new ArrayList();
 
     private GameObject prefab_vogel;
+
 
     private float timeLeft =Const.startTimer;
 
@@ -77,6 +79,8 @@ public class Logik2D : MonoBehaviour, IDetektorListener
 
     private (float, float) last_detection_coords = (-1f, -1f);
 
+    public float item1=-1;
+    public float item2=-1;
     public void recv_last_detection((float, float) last) {
         last_detection_coords = last;
         //Debug.Log("Last Detect: x: "+last.Item1.ToString()+" y: "+last.Item2.ToString());
@@ -99,6 +103,10 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         border_down = introCamera.transform.position.y-(camera_height/2f);
         border_left = introCamera.transform.position.x-(camera_width/2f);
         border_right = introCamera.transform.position.x+(camera_width/2f);
+
+        
+        GameObject cam_sprites = GameObject.Find("/D2_Welt/D2SpriteCamera");
+        cam_sprites.transform.position=Const.calibration_pos;
 
         init_all_fisch();
 
@@ -1249,6 +1257,10 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         init_wait_time-=Time.deltaTime;
         if(init_wait_time<0)
         {
+            GameObject cam_sprites = GameObject.Find("/D2_Welt/D2SpriteCamera");
+            cam_sprites.transform.position=Const.start_intro_pos;
+            GameObject real_cam = GameObject.Find("/D2_Welt/Camera4");
+            real_cam.GetComponent<Camera>().backgroundColor = new Color32(0,0,0,255);
             return true;
         }
         return false;
@@ -1324,7 +1336,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
             case State.init_wait:
                 if (init_wait())
                 {
-                    state = State.intro_1;  // intro_1
+                    state = State.normal_play;  // intro_1
                 }
                 break;
 
@@ -1365,6 +1377,8 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                 break;
         }
 
+        population_control();
+
 
         
 
@@ -1395,12 +1409,12 @@ public class Logik2D : MonoBehaviour, IDetektorListener
     {
 
         
-        GameObject sprite = (GameObject)Instantiate(prefab_vogel,rand_pos() , Quaternion.identity);
-        BasisFischLogik bfl = sprite.GetComponent<BasisFischLogik>();
-        Fisch_simple_rotation fsr = sprite.GetComponent<Fisch_simple_rotation>();
-        fsr.set_normal_orientation_left();
+        // GameObject sprite = (GameObject)Instantiate(prefab_vogel,rand_pos() , Quaternion.identity);
+        // BasisFischLogik bfl = sprite.GetComponent<BasisFischLogik>();
+        // Fisch_simple_rotation fsr = sprite.GetComponent<Fisch_simple_rotation>();
+        // fsr.set_normal_orientation_left();
 
-        fische.Add(sprite);
+        // fische.Add(sprite);
     }
 
 
@@ -1421,20 +1435,106 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         }
         else
         {
-            int rand_indice = UnityEngine.Random.Range(0,fische.Count-1);
+            while(true)
+            {
+                int rand_indice = UnityEngine.Random.Range(0,fische.Count-1);
+                GameObject fishc = (GameObject)fische[rand_indice];
+                if(fishc.GetComponent<BasisFischLogik>().get_state()!=1)
+                {
+                    continue;
+                }
         
-            return Tuple.Create(true,(GameObject)fische[rand_indice]);
+                return Tuple.Create(true,fishc);
+            }
+            
         }
         
     }
 
+    private int max_fisch_count=30;
+    private int max_fisch_bg_count=35;
+
+
+
+    private ArrayList fisch_prefabs;
+    private GameObject predator;
+
     private void init_all_fisch()
     {
+        fisch_prefabs= new ArrayList();
+        fisch_prefabs.Add( Resources.Load("Prefab/FischGelb"));
+        fisch_prefabs.Add( Resources.Load("Prefab/FischPink1"));
+        fisch_prefabs.Add( Resources.Load("Prefab/ClownPink"));
+        fisch_prefabs.Add( Resources.Load("Prefab/FischStreifenPG"));
+        fisch_prefabs.Add( Resources.Load("Prefab/FischStreifenBR"));
+        fisch_prefabs.Add( Resources.Load("Prefab/FischBlau"));
+        fisch_prefabs.Add( Resources.Load("Prefab/FischOrange"));
+        fisch_prefabs.Add( Resources.Load("Prefab/Ariel"));
+        fisch_prefabs.Add( Resources.Load("Prefab/FischPink2"));
+        // predator = Resources.Load("Prefab/PredatorFisch");
 
+
+        
+        for (int i = 0; i < max_fisch_bg_count; i++)
+        {
+            GameObject fisch_prefab = (GameObject)fisch_prefabs[UnityEngine.Random.Range(0,fisch_prefabs.Count)];
+            int rand = UnityEngine.Random.Range(0,2);
+            int offset=60;
+            if(rand==0)
+            {
+                offset*=-1;
+            }
+            Vector3 position = new Vector3(10000+offset,0,7);
+            GameObject new_fisch = Instantiate(fisch_prefab,position,Quaternion.identity);
+            // new_fisch.GetComponent<SpriteRenderer>().color=new Color32(118,118,118,255);
+            new_fisch.GetComponent<BasisFischLogik>().set_as_bg();
+            new_fisch.transform.localScale *= UnityEngine.Random.Range(0.3f,0.6f);
+            fische_bg.Add(new_fisch);
+        }
     }
 
     private void population_control()
     {
+        if(fische.Count<max_fisch_count)
+        {
+            int diff = max_fisch_count-fische.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                GameObject fisch_prefab = (GameObject)fisch_prefabs[UnityEngine.Random.Range(0,fisch_prefabs.Count)];
+                int rand = UnityEngine.Random.Range(0,2);
+                int offset=60;
+                if(rand==0)
+                {
+                    offset*=-1;
+                }
+                Vector3 position = new Vector3(10000+offset,0,0);
+                GameObject new_fisch = Instantiate(fisch_prefab,position,Quaternion.identity);
+                new_fisch.transform.localScale *= UnityEngine.Random.Range(0.5f,1.4f);
+                fische.Add(new_fisch);
+            }
+        }
+
+        // last_detection_coords.Item1=item1;
+        // last_detection_coords.Item2=item2;
+        
+        if(last_detection_coords.Item1>=0)
+        {
+            float breite = border_right-border_left;
+            float höhe = border_up-border_down;
+
+            Vector3 apoint = new Vector3(last_detection_coords.Item1*breite+border_left,((1-last_detection_coords.Item2)*höhe)+-10f,0);
+                
+
+            var pointde = GameObject.Find("/pointde");
+            pointde.transform.position=new Vector3(apoint.x,apoint.y,-1);
+            // Debug.Log(breite);
+            for (int i = 0; i < fische.Count; i++)
+            {
+                GameObject fisch = (GameObject)fische[i];
+                // Debug.Log(apoint);
+                fisch.GetComponent<BasisFischLogik>().flee_affected(apoint);
+            }
+        }
         
     }
 

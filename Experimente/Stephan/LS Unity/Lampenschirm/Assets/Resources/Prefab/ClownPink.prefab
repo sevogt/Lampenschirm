@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2896112492789214522
+--- !u!1 &4791996908556457189
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2896112492789214525}
-  - component: {fileID: 2896112492789214524}
-  - component: {fileID: 2896112492789214523}
-  - component: {fileID: 5761471867880568508}
-  - component: {fileID: 9000357926899827938}
+  - component: {fileID: 4791996909182496666}
+  - component: {fileID: 4791996908556457185}
+  - component: {fileID: 4791996908556457186}
+  - component: {fileID: 4791996908556457187}
+  - component: {fileID: 4791996908556457188}
   m_Layer: 0
   m_Name: ClownPink
   m_TagString: Untagged
@@ -20,27 +20,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2896112492789214525
+--- !u!4 &4791996909182496666
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2896112492789214522}
+  m_GameObject: {fileID: 4791996908556457189}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0019350587, y: -0.33452776, z: 0}
-  m_LocalScale: {x: 0.00012048249, y: 0.004563605, z: 1}
+  m_LocalPosition: {x: 9992.26, y: -2.0099983, z: 0}
+  m_LocalScale: {x: 0.48192996, y: 0.5730975, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2896112492789214524
+--- !u!212 &4791996908556457185
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2896112492789214522}
+  m_GameObject: {fileID: 4791996908556457189}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_Sprite: {fileID: 1460800030560970354, guid: fe2b1123b994c44f1bd87230e8f10320,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 4.8601236, y: 2.86}
@@ -84,14 +84,14 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &2896112492789214523
+--- !u!95 &4791996908556457186
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2896112492789214522}
+  m_GameObject: {fileID: 4791996908556457189}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 716545c636c0d428bb779a3eee0cc1ba, type: 2}
@@ -103,29 +103,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5761471867880568508
+--- !u!114 &4791996908556457187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2896112492789214522}
+  m_GameObject: {fileID: 4791996908556457189}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a51c345ff32c8194db6fd8160b2668bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9000357926899827938
+  do_flip: 0
+--- !u!114 &4791996908556457188
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2896112492789214522}
+  m_GameObject: {fileID: 4791996908556457189}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f795e8bd6a24574a9303fb984fe98e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  do_debug: 0
   state: 1
   predatory_state: 0

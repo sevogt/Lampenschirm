@@ -6,13 +6,13 @@ public class Fisch_simple_rotation : MonoBehaviour
 {
     
     private bool is_flipped = false;
-    private bool do_flip=true;
+    public bool do_flip;
 
     private Vector3 velocity = new Vector3(1,0,0);
 
     void Start()
     {
-
+        
     }
 
     public void set_normal_orientation_left()
@@ -43,13 +43,13 @@ public class Fisch_simple_rotation : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        if(velocity.x >0 && is_flipped && do_flip)
+        if(velocity.x >0 && is_flipped )
         {
             is_flipped=false;
             GetComponent<SpriteRenderer>().flipY=!GetComponent<SpriteRenderer>().flipY;
 
         }
-        else if (velocity.x <0 && !is_flipped  && do_flip)
+        else if (velocity.x <0 && !is_flipped  )
         {
             is_flipped=true;
             GetComponent<SpriteRenderer>().flipY=!GetComponent<SpriteRenderer>().flipY;
