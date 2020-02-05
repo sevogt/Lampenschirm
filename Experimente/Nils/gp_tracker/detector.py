@@ -4,6 +4,7 @@ import numpy as np
 import socket
 import math
 import time
+import sys
 from multiprocessing import Process, SimpleQueue
 
 from pprint import pprint
@@ -27,9 +28,9 @@ if DEBUG2:
     CAM_DRIVER = ""
 
 
-def send_results(results_q):
+def send_results(results_q, srv_addr, srv_port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_t = (SRV_ADDR, SRV_PORT)
+    serv_t = (srv_addr, srv_port)
 
     while True:
         res = results_q.get()
@@ -175,7 +176,7 @@ def get_trackbar_update_dil_iter(detection_params):
     return update_dil_iter
 
 
-def get_params_thresh_blur(cap_s, t_mat, t_size, back_sub):
+def get_params_thresh_blur(detection_params, cap_s, t_mat, t_size, back_sub):
     cap, cap_size = cap_s
     frame = np.zeros(cap_size, dtype=np.uint8)
     warp_frame = np.zeros(t_size, dtype=np.uint8)
@@ -186,18 +187,6 @@ def get_params_thresh_blur(cap_s, t_mat, t_size, back_sub):
     fg_mask = np.zeros((t_size[0], t_size[1], 1), dtype=np.uint8)
     fg_dilate = np.zeros((t_size[0], t_size[1], 1), dtype=np.uint8)
     t_dim = (t_size[1], t_size[0])
-    
-    detection_params = {'eql_h': False, 'k_sz': (21, 21), 'thresh': 124, "sub_lr": -1, "dil": False,
-                         "dil_type": cv2.MORPH_RECT, "dil_k_sz": 21, "dil_iter": 3, "min_c_sz": 9*100}
-    detection_params = {'dil': True,
-        'dil_iter': 5,
-        'dil_k_sz': 6,
-        'dil_type': 0,
-        'eql_h': False,
-        'k_sz': (16, 16),
-        'min_c_sz': 900,
-        'sub_lr': -1,
-        'thresh': 109}
 
     window_name = "Einstellung Parameter"
     window_name_ctrl = "Kontrolle"
@@ -385,7 +374,7 @@ def get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub):
             return
 
 
-def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
+def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q, start_pause):
     cap, cap_size = cap_s
     frame = np.zeros(cap_size, dtype=np.uint8)
     warp_frame = np.zeros(t_size, dtype=np.uint8)
@@ -415,7 +404,7 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
     pos_fps = (int(text_sz[0]), int(text_sz[1]+text_sz[1]*0.5))
     pos_dstp = ((int(text_sz[0]), pos_fps[1] + int(text_sz[1]+text_sz[1]*0.5)))
     t_0 = time.monotonic()
-    pause_detection = False
+    pause_detection = start_pause
     while True:
         ret, _ = cap.read(image=frame)
         if not ret:
@@ -445,8 +434,6 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
             cont, _ = cv2.findContours(fg_dilate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
             main_cont = None
-            largest_cont = []
-            centers_cont = []
             selected_conts.clear()
             x_weight = 0
             y_weight = 0
@@ -504,6 +491,7 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
         cv2.imshow(window_name, warp_frame)
         wait_key = cv2.waitKey(1)
         if wait_key == ord('q'):
+            results_q.put(center_not_found)
             break
         elif wait_key == ord('p'):
             pause_detection = not pause_detection
@@ -517,7 +505,49 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
         
     cv2.destroyAllWindows()
 
+# str := corners=x0:y0,x1:y1,x2:y2,x3:y3;dil=True;dil_iter=5;dil_k_sz=6;dil_type=0;eql_h=False;k_sz=16;min_c_sz=900;sub_lr=-1;thresh=109;skip_config=True;start_pause=True;srv_addr=localhost;srv_port=54321
 def main():
+
+    default_params = { "dil": True, "dil_iter": 5, "dil_k_sz": 3, "dil_type": 0, "eql_h": False, "k_sz": (16, 16), "min_c_sz": 900, "sub_lr": -1, "thresh": 109 }
+    param_dict_1 = {}
+    corners = []
+    detection_params = {}
+    skip_config = False
+    start_pause = False
+
+    if len(sys.argv) > 1 and len(sys.argv[1]) > 0:
+        for p in sys.argv[1].split(";"):
+            k, v = p.split("=")
+            param_dict_1[k] = v
+    if "corners" in param_dict_1:
+        for p in param_dict_1["corners"].split(","):
+            corner_x, corner_y = p.split(":")
+            corners.append((corner_x, corner_y))
+    if "dil" in param_dict_1:
+        detection_params["dil"] = param_dict_1["dil"] in ("True",)
+    else:
+        detection_params["dil"] = default_params["dil"]
+    detection_params["dil_iter"] = int(param_dict_1.get("dil_iter", default_params["dil_iter"]))
+    detection_params["dil_k_sz"] = int(param_dict_1.get("dil_k_sz", default_params["dil_k_sz"]))
+    detection_params["dil_type"] = int(param_dict_1.get("dil_type", default_params["dil_type"]))
+    if "eql_h" in param_dict_1:
+        detection_params["eql_h"] = param_dict_1["eql_h"] in ("True",)
+    else:
+        detection_params["eql_h"] = default_params["eql_h"]
+    if "k_sz" in param_dict_1:
+        detection_params["k_sz"] = (int(param_dict_1["k_sz"]),int(param_dict_1["k_sz"]))
+    else:
+        detection_params["k_sz"] = default_params["k_sz"]
+    detection_params["min_c_sz"] = int(param_dict_1.get("min_c_sz", default_params["min_c_sz"]))
+    detection_params["sub_lr"] = int(param_dict_1.get("sub_lr", default_params["sub_lr"]))
+    detection_params["thresh"] = int(param_dict_1.get("thresh", default_params["thresh"]))
+    if "skip_config" in param_dict_1:
+        skip_config = param_dict_1["skip_config"] in ("True",)
+    if "start_pause" in param_dict_1:
+        start_pause = param_dict_1["start_pause"] in ("True",)
+    srv_addr = param_dict_1.get("srv_addr", SRV_ADDR)
+    srv_port = int(param_dict_1.get("srv_port", SRV_PORT))
+
     cap = cv2.VideoCapture(CAM_ID + CAM_DRIVER)
     if not cap.isOpened:
         print("Err 1")
@@ -530,51 +560,49 @@ def main():
               int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), 3)
     cap_s = (cap, v_size)
 
-    while True:
-        corners = prepare_cam(cap_s)
-        t_mat, t_size = get_t(corners)
-        if check_cam(cap_s, t_mat, t_size):
-            break
+    if not skip_config:
+        while True:
+            if len(corners) == 0:
+                corners = prepare_cam(cap_s)
+            t_mat, t_size = get_t(corners)
+            if check_cam(cap_s, t_mat, t_size):
+                break
+            corners.clear()
 
-    if DEBUG:
-        t_mat = np.array([[ 1.01856022e+00, -3.91099919e-02, -1.25259952e+03],
-                          [ 6.21716294e-03,  1.00510801e+00, -6.94297526e+02],
-                          [ 1.54955299e-05, -2.16240961e-05,  1.00000000e+00]], dtype=np.float32)
-        t_size = (608, 970, 3)
+        if DEBUG:
+            t_mat = np.array([[ 1.01856022e+00, -3.91099919e-02, -1.25259952e+03],
+                            [ 6.21716294e-03,  1.00510801e+00, -6.94297526e+02],
+                            [ 1.54955299e-05, -2.16240961e-05,  1.00000000e+00]], dtype=np.float32)
+            t_size = (608, 970, 3)
 
-    if ALGO == "MOG2":
-        back_sub = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+        if ALGO == "MOG2":
+            back_sub = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+        else:
+            back_sub = cv2.createBackgroundSubtractorKNN(history=1000, detectShadows=False)
+
+        while True:
+            get_params_thresh_blur(detection_params, cap_s, t_mat, t_size, back_sub)
+            if check_params(cap_s, t_mat, t_size, detection_params, back_sub):
+                break
+
+        get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub)
     else:
+        t_mat, t_size = get_t(corners)
         back_sub = cv2.createBackgroundSubtractorKNN(history=1000, detectShadows=False)
 
-    while True:
-        detection_params = get_params_thresh_blur(
-            cap_s, t_mat, t_size, back_sub)
-        if check_params(cap_s, t_mat, t_size, detection_params, back_sub):
-            break
-
-    get_params_min_cont_sz(cap_s, t_mat, t_size, detection_params, back_sub)
-    #if DEBUG:
-    #    detection_params = {'eql_h': False, 'k_sz': (
-    #        25, 25), 'thresh': 121, "sub_lr": -1, "dil": True, "dil_type": cv2.MORPH_RECT, "dil_k_sz": 4, "dil_iter": 3, "min_c_sz": 24*100}
-
     results_q = SimpleQueue()
-    server_process = Process(target=send_results, args=(results_q,))
+    server_process = Process(target=send_results, args=(results_q, srv_addr, srv_port))
     server_process.start()
 
-    detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q)
+    detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q, start_pause)
 
     results_q.put(None)
     cap.release()
     server_process.join()
 
-    pprint("t_mat = ")
-    pprint(t_mat)
-    pprint("t_size = ")
-    pprint(t_size)
-    pprint("detection_params = ")
-    pprint(detection_params)
-
+    print("corners={}:{},{}:{},{}:{},{}:{};dil={dil};dil_iter={dil_iter};dil_k_sz={dil_k_sz};dil_type={dil_type};eql_h={eql_h};k_sz={k_sz_first};min_c_sz={min_c_sz};sub_lr={sub_lr};thresh={thresh};srv_addr={srv_addr_x};srv_port={srv_port_x};skip_config={skip_config_x};start_pause={start_pause_x}"
+        .format(corners[0][0],corners[0][1], corners[1][0],corners[1][1], corners[2][0],corners[2][1], corners[3][0],corners[3][1], **detection_params
+        , k_sz_first=detection_params["k_sz"][0], srv_addr_x=srv_addr, srv_port_x=srv_port, skip_config_x=skip_config, start_pause_x=start_pause))
 
 if __name__ == "__main__":
     main()
