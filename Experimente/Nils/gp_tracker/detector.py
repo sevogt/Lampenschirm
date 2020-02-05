@@ -16,13 +16,13 @@ WIN_H = 768
 CAM_DRIVER = cv2.CAP_DSHOW
 ALGO = "KNN" # "MOG2"
 CAM_ID = 0
-SRV_ADDR = "localhost"
+SRV_ADDR =  "192.168.1.71"
 SRV_PORT = 54321
 
-DEBUG = True
-DEBUG2 = True
+DEBUG = False
+DEBUG2 = False
 if DEBUG2:
-    CAM_ID = "E:\\GP-A\\test.avi"
+    CAM_ID = "E:\\GP-A\\Test_Neu_Loop.mp4"
     CAM_DRIVER = ""
 
 
@@ -188,6 +188,15 @@ def get_params_thresh_blur(cap_s, t_mat, t_size, back_sub):
     
     detection_params = {'eql_h': False, 'k_sz': (21, 21), 'thresh': 124, "sub_lr": -1, "dil": False,
                          "dil_type": cv2.MORPH_RECT, "dil_k_sz": 21, "dil_iter": 3, "min_c_sz": 9*100}
+    detection_params = {'dil': True,
+        'dil_iter': 5,
+        'dil_k_sz': 6,
+        'dil_type': 0,
+        'eql_h': False,
+        'k_sz': (16, 16),
+        'min_c_sz': 900,
+        'sub_lr': -1,
+        'thresh': 109}
 
     window_name = "Einstellung Parameter"
     window_name_ctrl = "Kontrolle"
@@ -393,6 +402,7 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
     dil_struct_elem = cv2.getStructuringElement(detection_params["dil_type"], (2*detection_params["dil_k_sz"] + 1, 2 *
                                                 detection_params["dil_k_sz"]+1), (detection_params["dil_k_sz"], detection_params["dil_k_sz"]))
 
+    center_not_found = (-1., -1.)
     col_red = (0,0,255)
     col_cya = (255,255,0)
     col_yel = (0,255,255)
@@ -409,7 +419,7 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
             print("Err 9")
             exit(1)
 
-        center_prc = (-1., -1.)
+        center_prc = center_not_found
 
         cv2.warpPerspective(frame, t_mat, t_dim, dst=warp_frame)
         cv2.cvtColor(warp_frame, cv2.COLOR_BGR2GRAY, dst=grey_frame)
@@ -433,12 +443,16 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
         largest_cont = []
         centers_cont = []
         selected_conts.clear()
+        x_weight = 0
+        y_weight = 0
         for c in cont:
             moments = cv2.moments(c)
             cont_area = moments["m00"]
             if cont_area > detection_params["min_c_sz"]:
                 x_cont = int(moments["m10"]/moments["m00"])
                 y_cont = int(moments["m01"]/moments["m00"])
+                x_weight += (x_cont - t_dim[0]/2) * cont_area
+                y_weight += (y_cont - t_dim[1]/2) * cont_area
                 cont_t = (c, x_cont, y_cont, cont_area)
                 selected_conts.append(cont_t)
                 
@@ -446,15 +460,37 @@ def detect(cap_s, t_mat, t_size, detection_params, back_sub, results_q):
                     main_cont = cont_t
 
         if main_cont is not None:
-            
+
             cv2.drawContours(warp_frame, [x[0] for x in selected_conts], -1, col_cya, 2)
             cv2.drawContours(warp_frame, [main_cont[0]], -1, col_red, 2)
 
-            center_prc = (min((float(main_cont[1])/float(t_dim[0]), 1.)),
-                          min((float(main_cont[2])/float(t_dim[1]), 1.)))
+            if x_weight >= 0 and y_weight >= 0:
+                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1]) + np.square(c[2]) ) )
+                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] ) + np.square( cont_a[0][:,:,1] ) ) ) ), 0, ]
+            elif x_weight >= 0 and y_weight < 0:
+                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1]) + np.square(c[2] - t_dim[1]) ) )
+                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] ) + np.square( cont_a[0][:,:,1] - t_dim[1] ) ) ) ), 0, ]
+            elif x_weight < 0 and y_weight >= 0:
+                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1] - t_dim[0]) + np.square(c[2]) ) )
+                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] - t_dim[0] ) + np.square( cont_a[0][:,:,1] ) ) ) ), 0, ]
+            else:
+                cont_a = min(selected_conts, key = lambda c: np.sqrt( np.square(c[1] - t_dim[0]) + np.square(c[2] - t_dim[1]) ) )
+                x_sel, y_sel = cont_a[0][np.argmin( np.sqrt( ( np.square( cont_a[0][:,:,0] - t_dim[0] ) + np.square( cont_a[0][:,:,1] - t_dim[1] ) ) ) ), 0, ]
+                
+            #Mid
+            #center_prc = (min((float(main_cont[1])/float(t_dim[0]), 1.)),
+            #              min((float(main_cont[2])/float(t_dim[1]), 1.)))
+
+            #Ext Cont
+            #center_prc = (min((float(cont_a[1])/float(t_dim[0]), 1.)),
+            #              min((float(cont_a[2])/float(t_dim[1]), 1.)))
+
+            #Ext Point
+            center_prc = (min((float(x_sel)/float(t_dim[0]), 1.)),
+                          min((float(y_sel)/float(t_dim[1]), 1.)))
 
             cv2.circle(warp_frame, (int(center_prc[0]*t_dim[0]), int(center_prc[1]*t_dim[1])), 3, col_yel,3)
-            
+
         results_q.put(center_prc)
         
         cv2.putText(warp_frame, "FPS: {:>3.2f}".format(avg_fps), pos_fps, cv2.FONT_HERSHEY_SIMPLEX, 0.8, col_gre, 2)
