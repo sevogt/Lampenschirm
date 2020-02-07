@@ -90,7 +90,7 @@ public class BasisFischLogik : MonoBehaviour
             innate_top_speed_base+=2;
         }
         
-        Vector3 start_pos = rand_pos();
+        Vector3 start_pos = transform.position ; // rand_pos();
         new_target();
         transform.position=start_pos;
         has_goal=true;

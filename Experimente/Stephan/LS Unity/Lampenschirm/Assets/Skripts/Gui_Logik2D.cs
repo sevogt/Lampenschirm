@@ -27,6 +27,11 @@ public class Gui_Logik2D : MonoBehaviour
         GameObject.Find("/D2_Welt").GetComponent<Logik2D>().intro_skip();
     }
 
+    public void gui_schwarm()
+    {
+        GameObject.Find("/D2_Welt").GetComponent<Logik2D>().make_schwarm();
+    }
+
     public void gui_licht( )
     {
         licht_an=!licht_an;

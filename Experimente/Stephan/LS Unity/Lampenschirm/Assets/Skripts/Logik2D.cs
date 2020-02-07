@@ -1465,17 +1465,53 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         
     }
 
+    private int schwarm_count=80;
+    private ArrayList fische_schwarm;
+
+    private float time_schwarm = 22f;
+    private float counter_schwarm_timer = 22f;
+
+    public void make_schwarm()
+    {
+        for (int i = 0; i < fische_schwarm.Count; i++)
+        {
+            Destroy( (GameObject)fische_schwarm[i]);
+        }
+        fische_schwarm.Clear();
+        counter_schwarm_timer=time_schwarm;
+        GameObject fisch_prefab = (GameObject)fisch_prefabs[UnityEngine.Random.Range(0,fisch_prefabs.Count)];
+        int rand = UnityEngine.Random.Range(0,2);
+        int offset=27;
+        if(rand==0)
+        {
+            offset*=-1;
+        }
+        for (int i = 0; i < schwarm_count; i++)
+        {
+            int off_y = UnityEngine.Random.Range(-8,8);
+            
+            Vector3 position = new Vector3(10000+offset,off_y,0);
+            GameObject new_fisch = Instantiate(fisch_prefab,position,Quaternion.identity);
+            // new_fisch.GetComponent<SpriteRenderer>().color=new Color32(118,118,118,255);
+            
+            new_fisch.transform.localScale *= UnityEngine.Random.Range(1f,1.3f);
+            fische_schwarm.Add(new_fisch);
+        }
+    }
+
     private int max_fisch_count=30;
     private int max_fisch_bg_count=35;
 
-
+    
 
     private ArrayList fisch_prefabs;
     private GameObject predator;
 
     private void init_all_fisch()
     {
-        fisch_prefabs= new ArrayList();
+        fische_schwarm = new ArrayList();
+        fisch_prefabs = new ArrayList();
+
         fisch_prefabs.Add( Resources.Load("Prefab/FischGelb"));
         fisch_prefabs.Add( Resources.Load("Prefab/FischPink1"));
         fisch_prefabs.Add( Resources.Load("Prefab/ClownPink"));
@@ -1493,7 +1529,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         {
             GameObject fisch_prefab = (GameObject)fisch_prefabs[UnityEngine.Random.Range(0,fisch_prefabs.Count)];
             int rand = UnityEngine.Random.Range(0,2);
-            int offset=60;
+            int offset=27;
             if(rand==0)
             {
                 offset*=-1;
@@ -1509,6 +1545,18 @@ public class Logik2D : MonoBehaviour, IDetektorListener
 
     private void population_control()
     {
+        if(fische_schwarm.Count!=0)
+        {
+            counter_schwarm_timer-=Time.deltaTime;
+            if(counter_schwarm_timer<=0)
+            {
+                for (int i = 0; i < fische_schwarm.Count; i++)
+                {
+                    Destroy( (GameObject)fische_schwarm[i]);
+                }
+                fische_schwarm.Clear();
+            }
+        }
         if(fische.Count<max_fisch_count)
         {
             int diff = max_fisch_count-fische.Count;
@@ -1516,7 +1564,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
             {
                 GameObject fisch_prefab = (GameObject)fisch_prefabs[UnityEngine.Random.Range(0,fisch_prefabs.Count)];
                 int rand = UnityEngine.Random.Range(0,2);
-                int offset=60;
+                int offset=27;
                 if(rand==0)
                 {
                     offset*=-1;
