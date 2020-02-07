@@ -30,7 +30,7 @@ public static class Const
     public static readonly Vector3 calibration_pos = new Vector3(10000,-50,-2);
     public static readonly Vector3 start_intro_pos = new Vector3(10000,200,-2);
     
-    public static readonly float acceleration_flee=1.7f;
+    public static readonly float acceleration_flee=2.7f;
     public static readonly float flee_add_x=30f;
 
     public static readonly float deletion_time=20f;
@@ -40,7 +40,7 @@ public static class Const
 
     public static readonly float run_away_time = 3f; // sekunde
 
-    public static readonly float affected_radius = 5.4f;
+    public static readonly float affected_radius = 8.4f;
 
     public static readonly float flee_distance = 5f;
 

@@ -170,7 +170,7 @@ public class BasisFischLogik : MonoBehaviour
         {
             boost = true;
             run_time_left = Const.run_away_time;
-            // this.GetComponent<SpriteRenderer>().color=new Color32(200,20,30,255);
+            this.GetComponent<SpriteRenderer>().color=new Color32(200,20,30,255);
             has_goal=true;
             has_target=false;
 

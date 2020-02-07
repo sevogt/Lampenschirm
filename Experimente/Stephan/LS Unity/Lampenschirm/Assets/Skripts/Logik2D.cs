@@ -29,6 +29,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
     private float border_right;
 
     private Camera sprite_camera;
+    private GameObject licht_maske;
 
     private ArrayList fische = new ArrayList();
     private ArrayList fische_bg = new ArrayList();
@@ -108,7 +109,11 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         GameObject cam_sprites = GameObject.Find("/D2_Welt/D2SpriteCamera");
         cam_sprites.transform.position=Const.calibration_pos;
 
+        licht_maske = GameObject.Find("/licht_maske");
+
         init_all_fisch();
+
+        GameObject.Find("/Detektor").GetComponent<Detektor>().register_listener(this);
 
         {
             AnimationState intro_animation_state = AnimationState.s01;
@@ -156,7 +161,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
             };
             intro_1= new ComplexAnimation(closure);
 
-            GameObject.Find("/Detektor").GetComponent<Detektor>().register_listener(this);
+           
         }
 
             
@@ -1403,18 +1408,27 @@ public class Logik2D : MonoBehaviour, IDetektorListener
         return image;
     }
 
+    public void intro_skip()
+    {
+        state = State.normal_play;
+        sprite_camera.transform.position=new Vector3(sprite_camera.transform.position.x,0,sprite_camera.transform.position.z);
+
+    }
+
     
 
-    public void mehr(int x)
+    public void licht(bool an)
     {
 
         
-        // GameObject sprite = (GameObject)Instantiate(prefab_vogel,rand_pos() , Quaternion.identity);
-        // BasisFischLogik bfl = sprite.GetComponent<BasisFischLogik>();
-        // Fisch_simple_rotation fsr = sprite.GetComponent<Fisch_simple_rotation>();
-        // fsr.set_normal_orientation_left();
-
-        // fische.Add(sprite);
+        if(an)
+        {
+            licht_maske.SetActive(true);
+        }
+        else
+        {
+            licht_maske.SetActive(false);
+        }
     }
 
 

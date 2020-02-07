@@ -21,9 +21,26 @@ public class Gui_Logik2D : MonoBehaviour
         Application.Quit();
     }
 
-    public void gui_mehr()
+    private bool licht_an=true;
+    public void gui_intro_skip()
     {
-        GameObject.Find("/D2_Welt").GetComponent<Logik2D>().mehr(3);
+        GameObject.Find("/D2_Welt").GetComponent<Logik2D>().intro_skip();
+    }
+
+    public void gui_licht( )
+    {
+        licht_an=!licht_an;
+        GameObject.Find("/D2_Welt").GetComponent<Logik2D>().licht(licht_an);
+        
+        var text_comp = GameObject.Find("/D2_Welt/Canvas/Licht/Licht").GetComponent<UnityEngine.UI.Text>();
+        if(licht_an)
+        {
+            text_comp.text="Licht ausschalten";
+        }
+        else
+        {
+            text_comp.text="Licht einschalten";
+        }
     }
 
     public void gui_start_aqua()
@@ -60,7 +77,7 @@ public class Gui_Logik2D : MonoBehaviour
         input1.text=Mathf.Abs((camera.transform.position.y + (Const.height_zylinder/2f))).ToString();
 
         var input2 = GameObject.Find("/D2_Welt/Canvas/weite").GetComponent<InputField>();
-        input2.text=(camera.transform.position.z - (Const.radius)).ToString();
+        input2.text=( Mathf.Abs(camera.transform.position.z) - (Const.radius)).ToString();
 
         var input3 = GameObject.Find("/D2_Welt/Canvas/fov").GetComponent<InputField>();
         input3.text=(camera.fieldOfView).ToString();
@@ -70,7 +87,15 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/hohe").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         Camera camera = GameObject.Find("/D2_Welt/Camera"+active_beamer).GetComponent<Camera>();
         camera.transform.position=new Vector3(camera.transform.position.x,(-Const.height_zylinder/2f)-data,camera.transform.position.z);
@@ -81,7 +106,15 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/hohe").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         data+=0.001f;
         input.text =data.ToString();
@@ -95,7 +128,15 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/hohe").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         data-=0.001f;
         
@@ -110,10 +151,18 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/weite").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         Camera camera = GameObject.Find("/D2_Welt/Camera"+active_beamer).GetComponent<Camera>();
-        camera.transform.position=new Vector3(camera.transform.position.x,camera.transform.position.y,data+Const.radius);
+        camera.transform.position=new Vector3(camera.transform.position.x,camera.transform.position.y,-(data+Const.radius));
 
     }
 
@@ -121,13 +170,21 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/weite").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         data+=0.001f;
         input.text =data.ToString();
 
         Camera camera = GameObject.Find("/D2_Welt/Camera"+active_beamer).GetComponent<Camera>();
-        camera.transform.position=new Vector3(camera.transform.position.x,camera.transform.position.y,data+Const.radius);
+        camera.transform.position=new Vector3(camera.transform.position.x,camera.transform.position.y,-(data+Const.radius));
 
     }
 
@@ -135,13 +192,21 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/weite").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         data-=0.001f;
         input.text =data.ToString();
 
         Camera camera = GameObject.Find("/D2_Welt/Camera"+active_beamer).GetComponent<Camera>();
-        camera.transform.position=new Vector3(camera.transform.position.x,camera.transform.position.y,data+Const.radius);
+        camera.transform.position=new Vector3(camera.transform.position.x,camera.transform.position.y,-(data+Const.radius));
 
     }
 
@@ -149,7 +214,15 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/fov").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         Camera camera = GameObject.Find("/D2_Welt/Camera"+active_beamer).GetComponent<Camera>();
         camera.fieldOfView=data;
@@ -159,7 +232,15 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/fov").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         data+=0.01f;
         input.text =data.ToString();
@@ -172,7 +253,15 @@ public class Gui_Logik2D : MonoBehaviour
     {
         var input = GameObject.Find("/D2_Welt/Canvas/fov").GetComponent<InputField>();
         string text = input.text;
-        float data = float.Parse(text);
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
 
         data-=0.01f;
         input.text =data.ToString();
