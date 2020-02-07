@@ -522,7 +522,7 @@ def main():
     if "corners" in param_dict_1:
         for p in param_dict_1["corners"].split(","):
             corner_x, corner_y = p.split(":")
-            corners.append((corner_x, corner_y))
+            corners.append((int(corner_x), int(corner_y)))
     if "dil" in param_dict_1:
         detection_params["dil"] = param_dict_1["dil"] in ("True",)
     else:
