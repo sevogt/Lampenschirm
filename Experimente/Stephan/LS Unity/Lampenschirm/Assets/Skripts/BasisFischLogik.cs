@@ -10,6 +10,8 @@ public class BasisFischLogik : MonoBehaviour
 
     private float min_speed = 0.8f;
 
+    private bool is_schwarm=false;
+
     public bool do_debug=false;
 
     private float init_wait=4f;
@@ -53,6 +55,11 @@ public class BasisFischLogik : MonoBehaviour
     public void set_as_predator()
     {
         predatory_state=1;
+    }
+
+    public void set_is_schwarm()
+    {
+        is_schwarm=true;
     }
 
     public void set_state_killed()
@@ -117,6 +124,22 @@ public class BasisFischLogik : MonoBehaviour
             acceleration=acceleration/2f;
             decceleration=decceleration/2f;
         }
+
+        if(is_schwarm)
+        {
+            if(transform.position.x>10000)
+            {
+                goal.x=10000 -400;
+            }
+            else
+            {
+                goal.x=10000 + 400;
+            }
+           
+        }
+
+        
+
     }
 
     // sehr hart eingrenzen, wo alles die welt ist, wo alles sichtbar ist.
@@ -183,6 +206,18 @@ public class BasisFischLogik : MonoBehaviour
                 goal.x-=Const.flee_add_x;
             }
             goal.y=Random.Range(-9f,9f);
+
+            if(is_schwarm)
+            {
+                if(transform.position.x>=interaction_position.x)
+                {
+                    goal.x+=Const.flee_add_x*6;
+                }
+                else
+                {
+                    goal.x-=Const.flee_add_x*6;
+                }
+            }
 
 
             // Vector3 new_pos = (transform.position-interaction_position);
@@ -472,6 +507,8 @@ public class BasisFischLogik : MonoBehaviour
             }
         }
         has_goal=true;
+
+        
         
     }
 }

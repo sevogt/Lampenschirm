@@ -1492,6 +1492,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
             
             Vector3 position = new Vector3(10000+offset,off_y,0);
             GameObject new_fisch = Instantiate(fisch_prefab,position,Quaternion.identity);
+            new_fisch.GetComponent<BasisFischLogik>().set_is_schwarm();
             // new_fisch.GetComponent<SpriteRenderer>().color=new Color32(118,118,118,255);
             
             new_fisch.transform.localScale *= UnityEngine.Random.Range(1f,1.3f);
@@ -1596,6 +1597,15 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                 // Debug.Log(apoint);
                 fisch.GetComponent<BasisFischLogik>().flee_affected(apoint);
             }
+
+            for (int i = 0; i < fische_schwarm.Count; i++)
+            {
+                GameObject fisch = (GameObject)fische_schwarm[i];
+                // Debug.Log(apoint);
+                fisch.GetComponent<BasisFischLogik>().flee_affected(apoint);
+            }
+
+            
         }
         
     }
