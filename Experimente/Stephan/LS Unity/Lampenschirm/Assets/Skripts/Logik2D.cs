@@ -1472,7 +1472,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
     private int schwarm_count=80;
     private ArrayList fische_schwarm;
 
-    private float time_schwarm = 60;
+    private float time_schwarm = 22;
     private float counter_schwarm_timer = 22f;
 
     public void make_schwarm()
@@ -1550,7 +1550,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
 
     private void population_control()
     {
-        if(true)
+        if(fische_schwarm.Count > 0)
         {
             counter_schwarm_timer-=Time.deltaTime;
             if(counter_schwarm_timer<=0)
@@ -1560,7 +1560,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                     Destroy( (GameObject)fische_schwarm[i]);
                 }
                 fische_schwarm.Clear();
-                make_schwarm();
+                //make_schwarm();
             }
         }
         if(fische.Count<max_fisch_count)
