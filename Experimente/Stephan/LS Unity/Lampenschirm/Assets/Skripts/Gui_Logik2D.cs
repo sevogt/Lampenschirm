@@ -39,6 +39,7 @@ public class Gui_Logik2D : MonoBehaviour
         if(begin)
         {
             begin=false;
+            GameObject.Find("/D2_Welt/Camera4").GetComponent<Camera>().backgroundColor = new Color(0,0,0,1);
             Destroy(GameObject.Find("/testbildgrun"));
         }
         

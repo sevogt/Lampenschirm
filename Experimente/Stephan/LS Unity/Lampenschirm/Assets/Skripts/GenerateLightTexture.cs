@@ -60,9 +60,6 @@ public class GenerateLightTexture : MonoBehaviour
 
     static float checkThreshold(float t)
     {
-      if(t > 0.4f)
-        return 0.4f;
-      else
-        return t;
+      return t > 0.3f? 0.3f : t;
     }
 }
