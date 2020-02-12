@@ -32,8 +32,26 @@ public class Gui_Logik2D : MonoBehaviour
         GameObject.Find("/D2_Welt").GetComponent<Logik2D>().make_schwarm();
     }
 
+    public void gui_licht_textur()
+    {
+        var input = GameObject.Find("/D2_Welt/Canvas/weite").GetComponent<InputField>();
+        string text = input.text;
+        float data=0;
+        try
+        {
+            data = float.Parse(text);
+        }
+        catch
+        {
+            ;
+        }
+        // Texture2D licht_texture = generate_licht_texture(data);
+        // GameObject.Find("/licht_maske").GetComponent<Renderer>().material.mainTexture=licht_texture;
+    }
+
     public void gui_licht( )
     {
+        
         licht_an=!licht_an;
         GameObject.Find("/D2_Welt").GetComponent<Logik2D>().licht(licht_an);
         
