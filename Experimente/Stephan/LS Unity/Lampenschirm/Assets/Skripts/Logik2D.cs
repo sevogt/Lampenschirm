@@ -153,6 +153,10 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                     {
                         Destroy(light);
                         Destroy(text);
+                        GameObject ps  = GameObject.Find("/Particle System");
+                        Destroy(ps);
+
+                        
                     
                         return true;
                     }

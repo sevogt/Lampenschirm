@@ -5858,7 +5858,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Generiere und Setze Licht Ausgleichs Textur
+  m_Text: Generiere und setze Licht Ausgleichs-Textur
 --- !u!222 &977344738
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15662,7 +15662,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: intro skip
+  m_Text: "\xDCberspringe Intro"
 --- !u!222 &1895558272
 CanvasRenderer:
   m_ObjectHideFlags: 0
