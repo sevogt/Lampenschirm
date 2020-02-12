@@ -1189,7 +1189,7 @@ public class Logik2D : MonoBehaviour, IDetektorListener
                 }
                 else if(opening_animation_state == AnimationState.s03 )
                 {
-                    if(b.transform.position.x< 10000 + camHalfWidth+2 )
+                    if(b.transform.position.x< 10000 + camHalfWidth+20 )
                     {
                         float speed_scale_value = wall_move_speed*deltaTime;
                         Vector3 tempv=new Vector3(moving_dir.x,moving_dir.y,moving_dir.z);
