@@ -57,8 +57,12 @@ public class Gui_Logik2D : MonoBehaviour
         {
             ;
         }
-        // Texture2D licht_texture = generate_licht_texture(data);
-        // GameObject.Find("/licht_maske").GetComponent<Renderer>().material.mainTexture=licht_texture;
+        Texture2D licht_texture = GenerateLightTexture.generateLightCorrection(Const.radius*100,data*100);
+        // Texture2D licht_texture = Resources.Load<Texture2D>("Images/testbildgrun");
+        Debug.Log(licht_texture.GetPixel(1100,500));
+ 
+        
+        GameObject.Find("/licht_maske").GetComponent<Renderer>().material.mainTexture=licht_texture;
     }
 
     public void gui_licht( )

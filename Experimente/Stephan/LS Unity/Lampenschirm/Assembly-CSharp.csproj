@@ -71,6 +71,7 @@
      <Compile Include="Assets\Skripts\Detektor.cs" />
      <Compile Include="Assets\Skripts\DetektorListener.cs" />
      <Compile Include="Assets\Skripts\Fisch_simple_rotation.cs" />
+     <Compile Include="Assets\Skripts\GenerateLightTexture.cs" />
      <Compile Include="Assets\Skripts\Gui_Logik2D.cs" />
      <Compile Include="Assets\Skripts\Logik2D.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
