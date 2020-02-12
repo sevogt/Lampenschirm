@@ -383,20 +383,20 @@ public class BasisFischLogik : MonoBehaviour
 
             transform.position+= delta_vel_vector;
 
-            if(transform.position.y>=Const.wassergrenze_oben  )
-            {
-                Vector3 pos_alt = transform.position;
-                pos_alt.y=Const.wassergrenze_oben-Const.safety_margin2;
-                transform.position= pos_alt;
-                temp_velocity.y= -temp_velocity.y;
-            }
-            if( transform.position.y<=Const.wassergrenze_unten)
-            {
-                Vector3 pos_alt = transform.position;
-                pos_alt.y=Const.wassergrenze_unten+Const.safety_margin2;
-                transform.position= pos_alt;
-                temp_velocity.y= -temp_velocity.y;
-            }
+            // if(transform.position.y>=Const.wassergrenze_oben  )
+            // {
+            //     Vector3 pos_alt = transform.position;
+            //     pos_alt.y=Const.wassergrenze_oben-Const.safety_margin2;
+            //     transform.position= pos_alt;
+            //     temp_velocity.y= -temp_velocity.y;
+            // }
+            // if( transform.position.y<=Const.wassergrenze_unten)
+            // {
+            //     Vector3 pos_alt = transform.position;
+            //     pos_alt.y=Const.wassergrenze_unten+Const.safety_margin2;
+            //     transform.position= pos_alt;
+            //     temp_velocity.y= -temp_velocity.y;
+            // }
       
 
             // test if goal reached
