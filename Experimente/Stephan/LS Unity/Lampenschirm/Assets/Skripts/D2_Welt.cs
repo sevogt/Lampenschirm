@@ -105,8 +105,8 @@ public class D2_Welt : MonoBehaviour
         camera.transform.RotateAround(Vector3.zero, Vector3.up, rot_around);
         
         camera.clearFlags= CameraClearFlags.Color;
-        camera.backgroundColor = Color.black;
-        camera.backgroundColor = Color.green;
+        // camera.backgroundColor = Color.black;
+        // camera.backgroundColor = Color.green;
      
         camera.fieldOfView=camData.fov;
         camera.nearClipPlane=0.3f;
