@@ -32,6 +32,18 @@ public class Gui_Logik2D : MonoBehaviour
         GameObject.Find("/D2_Welt").GetComponent<Logik2D>().make_schwarm();
     }
 
+    private bool begin=true;
+
+    public void gui_begin()
+    {
+        if(begin)
+        {
+            begin=false;
+            Destroy(GameObject.Find("/testbildgrun"));
+        }
+        
+    }
+
     public void gui_licht_textur()
     {
         var input = GameObject.Find("/D2_Welt/Canvas/weite").GetComponent<InputField>();
