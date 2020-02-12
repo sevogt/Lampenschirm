@@ -211,11 +211,11 @@ public class BasisFischLogik : MonoBehaviour
             {
                 if(transform.position.x>=interaction_position.x)
                 {
-                    goal.x+=Const.flee_add_x*6;
+                    goal.x+=Const.flee_add_x*3;
                 }
                 else
                 {
-                    goal.x-=Const.flee_add_x*6;
+                    goal.x-=Const.flee_add_x*3;
                 }
             }
 
