@@ -209,13 +209,14 @@ public class BasisFischLogik : MonoBehaviour
 
             if(is_schwarm)
             {
+                goal.y=Random.Range(-50,50);
                 if(transform.position.x>=interaction_position.x)
                 {
-                    goal.x+=Const.flee_add_x*3;
+                    goal.x=10000+Const.flee_add_x*3;
                 }
                 else
                 {
-                    goal.x-=Const.flee_add_x*3;
+                    goal.x=10000-Const.flee_add_x*3;
                 }
             }
 
