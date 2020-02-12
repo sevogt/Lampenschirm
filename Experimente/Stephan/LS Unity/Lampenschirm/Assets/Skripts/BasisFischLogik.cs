@@ -14,7 +14,7 @@ public class BasisFischLogik : MonoBehaviour
 
     public bool do_debug=false;
 
-    private float init_wait=4f;
+    private float init_wait=1.5f;
     
     private Vector3 temp_velocity = new Vector3(0,0,0);
     private Vector3 goal = new Vector3(30,1,0);
@@ -211,11 +211,11 @@ public class BasisFischLogik : MonoBehaviour
             {
                 if(transform.position.x>=interaction_position.x)
                 {
-                    goal.x+=Const.flee_add_x*6;
+                    goal.x+=Const.flee_add_x*3;
                 }
                 else
                 {
-                    goal.x-=Const.flee_add_x*6;
+                    goal.x-=Const.flee_add_x*3;
                 }
             }
 
